@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  MatButtonModule,
-  MatCardModule,
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 import { DayplannerRoutingModule } from './dayplanner-routing.module';
 import { DayplannerCardComponent } from './dayplanner-card.component';
@@ -14,6 +14,8 @@ import { DayplannerCardComponent } from './dayplanner-card.component';
     DayplannerRoutingModule,
     MatButtonModule,
     MatCardModule,
+    MatIconModule,
+    MatListModule,
   ],
   declarations: [DayplannerCardComponent]
 })
