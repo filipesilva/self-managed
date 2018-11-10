@@ -4,12 +4,11 @@ import { Component, Input } from '@angular/core';
   selector: 'sm-dayplanner-item',
   template: `
   <mat-list-item>
-    <span *ngIf="time">{{time | date:"hh:mm"}} -&nbsp;</span>
-    {{content}}
+    <span *ngIf="item.time">{{item.time | date:"hh:mm"}} -&nbsp;</span>
+    {{item.content}}
   </mat-list-item>
   `,
 })
-export class DayplannerItemComponent implements DayplannerItem {
-  @Input() time?: Date;
-  @Input() content: string;
+export class DayplannerItemComponent {
+  @Input() item: DayplannerItem;
 }
