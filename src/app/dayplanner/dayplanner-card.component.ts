@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'sm-dayplanner-card',
@@ -7,11 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DayplannerCardComponent {
   day: DayplannerDay;
+  ticker: Observable<Date>;
   constructor() {
     const mockDate = new Date(2019, 0, 1);
     const mockTime = (hours, minutes = 0) => new Date(
       mockDate.getTime() + hours * 60 * 60 * 1000 + minutes * 60 * 1000,
     );
+    // TODO: should tick every 5m.
+    this.ticker = of(mockTime(13));
     this.day = {
       date: mockDate,
       items: [
