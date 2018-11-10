@@ -1,9 +1,10 @@
 
 interface DayplannerItem {
-  time?: string;  // Should really be date
+  time?: Date;
   content: string;
 }
 
 interface DayplannerDay {
+  date: Date;
   items: DayplannerItem[];
 }
