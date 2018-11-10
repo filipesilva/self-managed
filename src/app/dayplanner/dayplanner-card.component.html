@@ -3,14 +3,7 @@
 
   <mat-card-content>
     <mat-list>
-      <mat-list-item> Amazon delivery </mat-list-item>
-      <mat-list-item> 8:30 - Review PRs </mat-list-item>
-      <mat-list-item> 9:00 - Investigate perf regression </mat-list-item>
-      <mat-list-item> 12:30 - Lunch and walk </mat-list-item>
-      <mat-list-item> 14:00 - Look into AOT bug </mat-list-item>
-      <mat-list-item> 18:00 - Gym </mat-list-item>
-      <mat-list-item> 20:30 - Dinner and time with Nora </mat-list-item>
-      <mat-list-item> 22:30 - Bed </mat-list-item>
+      <sm-dayplanner-item *ngFor="let item of day.items" time="{{item.time}}" content="{{item.content}}"></sm-dayplanner-item>
     </mat-list>
   </mat-card-content>
 
