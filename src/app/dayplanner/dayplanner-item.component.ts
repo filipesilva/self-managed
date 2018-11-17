@@ -21,7 +21,7 @@ enum DayplannerItemComponentState {
     </mat-list-item>
   `,
   styles: [`
-    .unscheduled { opacity: 0.8; }
+    .unscheduled { opacity: 0.7; }
     .past { opacity: 0.5; }
     .current { border: thin solid green; }
     .upcoming { }
