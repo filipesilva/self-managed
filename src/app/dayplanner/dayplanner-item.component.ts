@@ -23,7 +23,7 @@ enum DayplannerItemComponentState {
   styles: [`
     .unscheduled { opacity: 0.7; }
     .past { opacity: 0.5; }
-    .current { border: thin solid green; }
+    .current { border: thin solid green; border-radius: 5px;}
     .upcoming { }
   `]
 })
