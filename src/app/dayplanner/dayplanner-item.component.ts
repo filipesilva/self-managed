@@ -16,7 +16,7 @@ enum DayplannerItemComponentState {
   selector: 'sm-dayplanner-item',
   template: `
     <mat-list-item [ngClass]="this.state | async">
-      <span *ngIf="item.startTime">{{item.startTime | date:"hh:mm"}} -&nbsp;</span>
+      <span *ngIf="item.startTime">{{item.startTime | date:"HH:mm"}} -&nbsp;</span>
       {{item.content}}
     </mat-list-item>
   `,
