@@ -8,6 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { DayplannerRoutingModule } from './dayplanner-routing.module';
 import { DayplannerCardComponent } from './dayplanner-card.component';
 import { DayplannerItemComponent } from './dayplanner-item.component';
+import { TimeNumberPipe } from './time-number.pipe';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { DayplannerItemComponent } from './dayplanner-item.component';
   declarations: [
     DayplannerCardComponent,
     DayplannerItemComponent,
+    TimeNumberPipe,
   ]
 })
 export class DayplannerModule { }

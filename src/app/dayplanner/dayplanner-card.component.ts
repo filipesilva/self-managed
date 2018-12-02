@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { DayplannerDay } from './dayplanner-models';
+
+import { RawDayplannerItem, DayplannerItem } from './dayplanner-models';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'sm-dayplanner-card',
@@ -8,38 +12,42 @@ import { DayplannerDay } from './dayplanner-models';
   styleUrls: ['./dayplanner-card.component.css']
 })
 export class DayplannerCardComponent {
-  day: DayplannerDay;
-  ticker: Observable<Date>;
-  constructor() {
-    const mockDate = new Date(2019, 0, 1);
-    const mockTime = (hours, minutes = 0) => new Date(
-      mockDate.getTime() + hours * 60 * 60 * 1000 + minutes * 60 * 1000,
+  // Todo should come from the URL?
+  day = new Date(2019, 0, 1);
+  // TODO: should tick every 5m.
+  ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => this.dateToTimeNumber(date)));
+
+  private itemsCollection: AngularFirestoreCollection<RawDayplannerItem>;
+  items: Observable<DayplannerItem[]>;
+
+  constructor(private afs: AngularFirestore) {
+
+    this.itemsCollection = afs.collection<RawDayplannerItem>(
+      '/users/uzf2T6cgSOMcm1xdtfSliusIq7O2/dayplannerDays/20190101/items',
+      ref => ref.orderBy('startTime')
     );
-    // TODO: should tick every 5m.
-    this.ticker = of(mockTime(13));
-    this.day = {
-      date: mockDate,
-      items: [
-        { content: 'Amazon Delivery' },
-        { startTime: mockTime(8, 30), content: 'Review PRs' },
-        { startTime: mockTime(9), content: 'Investigate perf regression' },
-        { startTime: mockTime(12, 30), content: 'Lunch and walk' },
-        { startTime: mockTime(14), content: 'Look into AOT bug' },
-        { startTime: mockTime(18), content: 'Gym' },
-        { startTime: mockTime(20, 30), content: 'Dinner and time with Nora' },
-        { startTime: mockTime(22, 30), content: 'Bed' },
-      ]
-    };
-    this.updateEndTimes();
+    this.items = this.itemsCollection.valueChanges().pipe(
+      map(items => this.updateWithEndTimes(items))
+    );
   }
 
-  // TODO: come up with a CRUD model and abstract it away. Check firebase.
-  updateEndTimes() {
-    // Don't bother to check the last item, it will never have one after it.
-    for (let index = 0; index < this.day.items.length - 1; index++) {
-      const item = this.day.items[index];
-      const nextItem = this.day.items[index + 1];
-      item.endTime = nextItem.startTime;
+  // Update a DayplannerItem to include the expected end time.
+  private updateWithEndTimes(items: RawDayplannerItem[]): DayplannerItem[] {
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index] as DayplannerItem;
+      // Don't bother to check the last item, it will never have one after it.
+      if (item.startTime == null || index === items.length - 1) {
+        item.endTime = null;
+      } else {
+        const nextItem = items[index + 1];
+        item.endTime = nextItem.startTime;
+      }
     }
+
+    return items as DayplannerItem[];
+  }
+
+  private dateToTimeNumber(date: Date): number {
+    return date.getUTCHours() * 100 + date.getUTCMinutes();
   }
 }

@@ -4,7 +4,7 @@
   <mat-card-content>
     <mat-list>
       <sm-dayplanner-item
-        *ngFor="let item of day.items"
+        *ngFor="let item of items | async"
         [item]="item"
         [ticker]="ticker"
       ></sm-dayplanner-item>
@@ -15,7 +15,7 @@
     <button mat-icon-button>
       <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
     </button>
-    <button mat-button>{{day.date | date:"dd/MM/yyyy"}}</button>
+    <button mat-button>{{day | date:"dd/MM/yyyy"}}</button>
     <button mat-icon-button>
       <mat-icon aria-label="Example icon-button with a heart icon">navigate_next</mat-icon>
     </button>

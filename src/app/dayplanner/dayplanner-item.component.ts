@@ -16,7 +16,7 @@ enum DayplannerItemComponentState {
   selector: 'sm-dayplanner-item',
   template: `
     <mat-list-item [ngClass]="this.state | async">
-      <span *ngIf="item.startTime">{{item.startTime | date:"HH:mm"}} -&nbsp;</span>
+      <span *ngIf="item.startTime">{{item.startTime | timeNumber}} -&nbsp;</span>
       {{item.content}}
     </mat-list-item>
   `,
@@ -29,26 +29,26 @@ enum DayplannerItemComponentState {
 })
 export class DayplannerItemComponent implements OnInit {
   @Input() item: DayplannerItem;
-  @Input() ticker?: Observable<Date>;
+  @Input() ticker?: Observable<number>;
   @Input() state: Observable<DayplannerItemComponentState> =
     of(DayplannerItemComponentState.Upcoming);
 
   ngOnInit() {
     if (this.ticker) {
-      this.state = this.ticker.pipe(map(date => this.getStateForDate(date)));
+      this.state = this.ticker.pipe(map(time => this.getStateForDate(time)));
     }
   }
 
-  private getStateForDate(date: Date): DayplannerItemComponentState {
-    if (!this.item.startTime) {
+  private getStateForDate(time: number): DayplannerItemComponentState {
+    if (this.item.startTime === null) {
       return DayplannerItemComponentState.Unscheduled;
     }
 
-    if (this.item.endTime && date < this.item.endTime && date > this.item.startTime) {
+    if (this.item.endTime !== null && time < this.item.endTime && time > this.item.startTime) {
       return DayplannerItemComponentState.Current;
     }
 
-    if (date > this.item.startTime) {
+    if (time > this.item.startTime) {
       return DayplannerItemComponentState.Past;
     }
 
