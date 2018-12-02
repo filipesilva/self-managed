@@ -4,7 +4,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { environment } from '../environments/environment';
@@ -22,10 +21,9 @@ import { LoginComponent } from './login.component';
     BrowserAnimationsModule,
     AppRoutingModule,
     FlexLayoutModule,
-    AngularFireModule.initializeApp(environment.firebase, 'my-app-name'),
-    AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
-    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent]
