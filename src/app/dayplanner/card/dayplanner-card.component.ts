@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-models';
-import { dateToTimeNumber, getTodayDateString, dateIdToDate } from '../date-number-utils';
+import { dateToTimeNumber, getTodayDateString, dateStringToDate } from '../date-number-utils';
 
 
 @Component({
@@ -22,13 +22,15 @@ export class DayplannerCardComponent implements OnInit {
   constructor(private afs: AngularFirestore, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    let id = this.route.snapshot.paramMap.get('id') || getTodayDateString();
+    let dayplannerId = this.route.snapshot.paramMap.get('id') || getTodayDateString();
     // TODO: use current id instead of 20190101 when CRUD ops are enabled.
-    id = '20190101';
-    this.day = dateIdToDate(id);
+    dayplannerId = '20190101';
+    // TODO: use current user id.
+    const userId = 'uzf2T6cgSOMcm1xdtfSliusIq7O2';
+    this.day = dateStringToDate(dayplannerId);
 
     const itemsCollection = this.afs.collection<RawDayplannerItem>(
-      `/users/uzf2T6cgSOMcm1xdtfSliusIq7O2/dayplannerDays/${id}/items`,
+      `/users/${userId}/dayplannerDays/${dayplannerId}/items`,
       ref => ref.orderBy('startTime')
     );
 
