@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-models';
-import { map } from 'rxjs/operators';
+import { dateToTimeNumber, getTodayDateString, dateIdToDate } from '../date-number-utils';
 
 
 @Component({
@@ -11,22 +13,26 @@ import { map } from 'rxjs/operators';
   templateUrl: './dayplanner-card.component.html',
   styleUrls: ['./dayplanner-card.component.css']
 })
-export class DayplannerCardComponent {
-  // Todo should come from the URL?
-  day = new Date(2019, 0, 1);
+export class DayplannerCardComponent implements OnInit {
+  day: Date;
   // TODO: should tick every 5m.
-  ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => this.dateToTimeNumber(date)));
-
-  private itemsCollection: AngularFirestoreCollection<RawDayplannerItem>;
+  ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => dateToTimeNumber(date)));
   items: Observable<DayplannerItem[]>;
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, private route: ActivatedRoute) { }
 
-    this.itemsCollection = afs.collection<RawDayplannerItem>(
-      '/users/uzf2T6cgSOMcm1xdtfSliusIq7O2/dayplannerDays/20190101/items',
+  ngOnInit() {
+    let id = this.route.snapshot.paramMap.get('id') || getTodayDateString();
+    // TODO: use current id instead of 20190101 when CRUD ops are enabled.
+    id = '20190101';
+    this.day = dateIdToDate(id);
+
+    const itemsCollection = this.afs.collection<RawDayplannerItem>(
+      `/users/uzf2T6cgSOMcm1xdtfSliusIq7O2/dayplannerDays/${id}/items`,
       ref => ref.orderBy('startTime')
     );
-    this.items = this.itemsCollection.valueChanges().pipe(
+
+    this.items = itemsCollection.valueChanges().pipe(
       map(items => this.updateWithEndTimes(items))
     );
   }
@@ -45,9 +51,5 @@ export class DayplannerCardComponent {
     }
 
     return items as DayplannerItem[];
-  }
-
-  private dateToTimeNumber(date: Date): number {
-    return date.getUTCHours() * 100 + date.getUTCMinutes();
   }
 }
