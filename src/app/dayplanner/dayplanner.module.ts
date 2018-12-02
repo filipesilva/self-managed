@@ -6,9 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
 import { DayplannerRoutingModule } from './dayplanner-routing.module';
-import { DayplannerCardComponent } from './dayplanner-card.component';
-import { DayplannerItemComponent } from './dayplanner-item.component';
-import { TimeNumberPipe } from './time-number.pipe';
+import { DayplannerCardComponent } from './card/dayplanner-card.component';
+import { DayplannerItemComponent } from './item/dayplanner-item.component';
+import { TimeNumberPipe } from './time-number/time-number.pipe';
 
 @NgModule({
   imports: [

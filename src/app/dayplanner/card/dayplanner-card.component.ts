@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 
-import { RawDayplannerItem, DayplannerItem } from './dayplanner-models';
+import { RawDayplannerItem, DayplannerItem } from '../dayplanner-models';
 import { map } from 'rxjs/operators';
 
 

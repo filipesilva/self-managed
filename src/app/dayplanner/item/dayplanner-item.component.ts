@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DayplannerItem } from './dayplanner-models';
+import { DayplannerItem } from '../dayplanner-models';
 
 
 enum DayplannerItemComponentState {

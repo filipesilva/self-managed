@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DayplannerCardComponent } from './dayplanner-card.component';
+import { DayplannerCardComponent } from './card/dayplanner-card.component';
 
 const routes: Routes = [
-  { path: '', component: DayplannerCardComponent }
+  { path: '', component: DayplannerCardComponent },
+  { path: ':id', component: DayplannerCardComponent }
 ];
 
 @NgModule({
