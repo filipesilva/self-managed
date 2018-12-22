@@ -8,6 +8,12 @@
         [item]="item"
         [ticker]="ticker"
       ></sm-dayplanner-item>
+
+      <sm-dayplanner-item-edit
+        [class.hidden]="!showNewItemForm"
+        [collection]="collection"
+      >
+      </sm-dayplanner-item-edit>
     </mat-list>
   </mat-card-content>
 
@@ -19,8 +25,11 @@
     <button mat-icon-button>
       <mat-icon aria-label="Example icon-button with a heart icon">navigate_next</mat-icon>
     </button>
-    <button mat-icon-button>
-      <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+    <button
+      mat-icon-button
+      (click)="showNewItemForm = !showNewItemForm"
+    >
+      <mat-icon aria-label="Add a new item to the Dayplan">add</mat-icon>
     </button>
     <button mat-icon-button>
       <mat-icon aria-label="Example icon-button with a heart icon">help_outline</mat-icon>

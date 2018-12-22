@@ -1,3 +1,5 @@
+import { RawDayplannerItem } from './dayplanner-models';
+
 // Utilities to transform dates to the codified date and time string used in Dayplanner.
 // A DateString is YYYYMMDD (e.g. 20190101), and a TimeString is HHmm (e.g. 2330).
 
@@ -31,4 +33,24 @@ export function timeNumberToTimeString(timeNbr: TimeNumber): TimeString {
   const timeStr = `${valOrZero(1)}${valOrZero(2)}:${valOrZero(3)}${valOrZero(4)}`;
 
   return timeStr;
+}
+
+export function timeStringtoTimeNumber(timeStr: TimeString): TimeNumber {
+  return parseInt(timeStr.replace(':', '').padEnd(4, '0'), 10);
+}
+
+// Should match these:
+// 10:00 something
+// 10:00 - something
+// 10 - something
+// 10 something
+const itemStringRegex = /^(?:(?<startTime>\d\d(?:\:\d\d)?) (?:- )?)?(?<content>.+)/s;
+
+export function parseItemString(str: string): RawDayplannerItem {
+  const match = str.match(itemStringRegex);
+
+  return {
+    startTime: match.groups.startTime ? timeStringtoTimeNumber(match.groups.startTime) : null,
+    content: match.groups.content
+  };
 }

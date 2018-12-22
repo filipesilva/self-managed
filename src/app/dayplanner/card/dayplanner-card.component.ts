@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import {
+  AngularFirestore,
+  DocumentChangeAction,
+  AngularFirestoreCollection
+} from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
@@ -18,6 +22,8 @@ export class DayplannerCardComponent implements OnInit {
   // TODO: should tick every 5m.
   ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => dateToTimeNumber(date)));
   items: Observable<DayplannerItem[]>;
+  collection: AngularFirestoreCollection<RawDayplannerItem>;
+  showNewItemForm = false;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute) { }
 
@@ -29,29 +35,29 @@ export class DayplannerCardComponent implements OnInit {
     const userId = 'uzf2T6cgSOMcm1xdtfSliusIq7O2';
     this.day = dateStringToDate(dayplannerId);
 
-    const itemsCollection = this.afs.collection<RawDayplannerItem>(
+    this.collection = this.afs.collection<RawDayplannerItem>(
       `/users/${userId}/dayplannerDays/${dayplannerId}/items`,
       ref => ref.orderBy('startTime')
     );
 
-    this.items = itemsCollection.valueChanges().pipe(
-      map(items => this.updateWithEndTimes(items))
+    this.items = this.collection.snapshotChanges().pipe(
+      map(actions => this.mapToItems(actions)),
     );
   }
 
-  // Update a DayplannerItem to include the expected end time.
-  private updateWithEndTimes(items: RawDayplannerItem[]): DayplannerItem[] {
-    for (let index = 0; index < items.length; index++) {
-      const item = items[index] as DayplannerItem;
-      // Don't bother to check the last item, it will never have one after it.
-      if (item.startTime == null || index === items.length - 1) {
-        item.endTime = null;
-      } else {
-        const nextItem = items[index + 1];
-        item.endTime = nextItem.startTime;
-      }
-    }
+  // Map a RawDayplannerItem action to include the id and expected end time.
+  private mapToItems(actions: DocumentChangeAction<RawDayplannerItem>[]): DayplannerItem[] {
+    return actions.map((action, idx) => {
+      const data = action.payload.doc.data();
+      const id = action.payload.doc.id;
+      let endTime = null;
 
-    return items as DayplannerItem[];
+      if (data.startTime !== null && idx !== actions.length - 1) {
+        const nextItem = actions[idx + 1].payload.doc.data();
+        endTime = nextItem.startTime;
+      }
+
+      return { id, endTime, ...data };
+    });
   }
 }

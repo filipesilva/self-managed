@@ -8,5 +8,6 @@ export interface RawDayplannerItem {
 }
 
 export type DayplannerItem = RawDayplannerItem & {
+  id: string;
   endTime: TimeNumber | null;
 };
