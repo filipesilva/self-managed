@@ -1,0 +1,14 @@
+<mat-list-item class="item">
+  <div [ngClass]="this.state | async" class="item">
+    <span *ngIf="item.startTime">{{item.startTime | timeNumber}} -&nbsp;</span>
+    {{item.content}}
+  </div>
+  <div class="actions">
+    <button mat-icon-button>
+      <mat-icon aria-label="Reschedule">query_builder</mat-icon>
+    </button>
+    <button mat-icon-button (click)="delete()">
+      <mat-icon aria-label="Delete">delete</mat-icon>
+    </button>
+  </div>
+</mat-list-item>

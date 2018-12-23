@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DayplannerItem } from '../dayplanner-models';
+import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
+import { AngularFirestoreCollection } from '@angular/fire/firestore';
 
 
 enum DayplannerItemComponentState {
@@ -14,22 +15,11 @@ enum DayplannerItemComponentState {
 
 @Component({
   selector: 'sm-dayplanner-item',
-  template: `
-    <mat-list-item>
-      <div [ngClass]="this.state | async">
-        <span *ngIf="item.startTime">{{item.startTime | timeNumber}} -&nbsp;</span>
-        {{item.content}}
-      </div>
-    </mat-list-item>
-  `,
-  styles: [`
-    .unscheduled { opacity: 0.7; }
-    .past { opacity: 0.5; }
-    .current { font-size: larger; font-weight: bolder; }
-    .upcoming { }
-  `]
+  templateUrl: 'dayplanner-item.component.html',
+  styleUrls: ['dayplanner-item.component.css']
 })
 export class DayplannerItemComponent implements OnInit {
+  @Input() collection: AngularFirestoreCollection<RawDayplannerItem>;
   @Input() item: DayplannerItem;
   @Input() ticker?: Observable<number>;
   @Input() state: Observable<DayplannerItemComponentState> =
@@ -39,6 +29,10 @@ export class DayplannerItemComponent implements OnInit {
     if (this.ticker) {
       this.state = this.ticker.pipe(map(time => this.getStateForDate(time)));
     }
+  }
+
+  delete() {
+    this.collection.doc(this.item.id).delete();
   }
 
   private getStateForDate(time: number): DayplannerItemComponentState {

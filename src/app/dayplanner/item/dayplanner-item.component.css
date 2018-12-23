@@ -1,0 +1,22 @@
+.unscheduled {
+  opacity: 0.7;
+}
+
+.past {
+  opacity: 0.5;
+}
+
+.current {
+  font-size: larger;
+  font-weight: bolder;
+}
+
+.actions {
+  margin-left: auto;
+  flex-shrink: 0;
+  visibility: hidden;
+}
+
+.item:hover .actions {
+  visibility: visible;
+}

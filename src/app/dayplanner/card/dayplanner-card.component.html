@@ -5,6 +5,7 @@
     <mat-list>
       <sm-dayplanner-item
         *ngFor="let item of items | async"
+        [collection]="collection"
         [item]="item"
         [ticker]="ticker"
       ></sm-dayplanner-item>
