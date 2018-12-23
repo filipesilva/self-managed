@@ -21,7 +21,7 @@ export class DayplannerCardComponent implements OnInit {
   day: Date;
   // TODO: should tick every 5m.
   ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => dateToTimeNumber(date)));
-  items: Observable<DayplannerItem[]>;
+  items$: Observable<DayplannerItem[]>;
   collection: AngularFirestoreCollection<RawDayplannerItem>;
   showNewItemForm = false;
 
@@ -40,7 +40,7 @@ export class DayplannerCardComponent implements OnInit {
       ref => ref.orderBy('startTime')
     );
 
-    this.items = this.collection.snapshotChanges().pipe(
+    this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => this.mapToItems(actions)),
     );
   }

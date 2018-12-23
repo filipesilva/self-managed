@@ -2,9 +2,10 @@
   <mat-card-title>Dayplanner</mat-card-title>
 
   <mat-card-content>
-    <mat-list>
+
+    <mat-list *ngIf="items$ | async as items; else loading">
       <sm-dayplanner-item
-        *ngFor="let item of items | async"
+        *ngFor="let item of items"
         [collection]="collection"
         [item]="item"
         [ticker]="ticker"
@@ -17,6 +18,9 @@
       >
       </sm-dayplanner-item-edit>
     </mat-list>
+
+    <ng-template #loading>Loading&hellip;</ng-template>
+
   </mat-card-content>
 
   <mat-card-actions>
