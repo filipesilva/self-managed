@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { parseItemString } from '../date-number-utils';
@@ -39,6 +39,7 @@ import { parseItemString } from '../date-number-utils';
 export class DayplannerItemEditComponent {
   @Input() item?: DayplannerItem;
   @Input() collection: AngularFirestoreCollection<RawDayplannerItem>;
+  @Output() submitted: EventEmitter<void> = new EventEmitter();
   itemString: string;
 
   constructor() { }
@@ -50,5 +51,6 @@ export class DayplannerItemEditComponent {
     } else {
       this.collection.add(rawItem);
     }
+    this.submitted.emit();
   }
 }
