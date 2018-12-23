@@ -24,21 +24,35 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-icon-button>
+    <button
+      mat-icon-button
+      matTooltip="Previous day"
+      aria-label="Switches to the previous day"
+    >
       <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
     </button>
     <button mat-button>{{day | date:"dd/MM/yyyy"}}</button>
-    <button mat-icon-button>
+    <button
+      mat-icon-button
+      matTooltip="Next day"
+      aria-label="Switches to the next day"
+    >
       <mat-icon aria-label="Example icon-button with a heart icon">navigate_next</mat-icon>
     </button>
     <button
       mat-icon-button
+      matTooltip="Add a new item"
+      aria-label="Shows a form to add new items"
       (click)="showNewItemForm = !showNewItemForm"
     >
       <mat-icon aria-label="Add a new item to the Dayplan">add</mat-icon>
     </button>
-    <button mat-icon-button>
-      <mat-icon aria-label="Example icon-button with a heart icon">help_outline</mat-icon>
+    <button
+      mat-icon-button
+      matTooltip="Information about Dayplanner"
+      aria-label="Shows information about Dayplanner"
+    >
+      <mat-icon aria-label="Help">help_outline</mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>

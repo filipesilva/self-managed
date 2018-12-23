@@ -17,11 +17,17 @@
       {{item.content}}
     </div>
     <div class="actions">
-      <button mat-icon-button>
+      <button
+        mat-icon-button
+        matTooltip="Reschedule this item"
+        aria-label="Reschedule this item"
+      >
         <mat-icon aria-label="Reschedule">query_builder</mat-icon>
       </button>
       <button
         mat-icon-button
+        matTooltip="Delete this item"
+        aria-label="Delete this item"
         (click)="delete()"
       >
         <mat-icon aria-label="Delete">delete</mat-icon>
