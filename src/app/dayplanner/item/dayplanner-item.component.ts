@@ -15,15 +15,17 @@ enum DayplannerItemComponentState {
 @Component({
   selector: 'sm-dayplanner-item',
   template: `
-    <mat-list-item [ngClass]="this.state | async">
-      <span *ngIf="item.startTime">{{item.startTime | timeNumber}} -&nbsp;</span>
-      {{item.content}}
+    <mat-list-item>
+      <div [ngClass]="this.state | async">
+        <span *ngIf="item.startTime">{{item.startTime | timeNumber}} -&nbsp;</span>
+        {{item.content}}
+      </div>
     </mat-list-item>
   `,
   styles: [`
     .unscheduled { opacity: 0.7; }
     .past { opacity: 0.5; }
-    .current { border: thin solid green; border-radius: 5px;}
+    .current { font-size: larger; font-weight: bolder; }
     .upcoming { }
   `]
 })
