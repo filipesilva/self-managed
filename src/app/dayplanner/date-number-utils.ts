@@ -54,3 +54,7 @@ export function parseItemString(str: string): RawDayplannerItem {
     content: match.groups.content
   };
 }
+
+export function itemToItemString(item: RawDayplannerItem): string {
+  return `${item.startTime ? timeNumberToTimeString(item.startTime) + ' - ' : ''}${item.content}`;
+}

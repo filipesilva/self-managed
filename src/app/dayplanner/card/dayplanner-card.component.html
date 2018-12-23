@@ -11,9 +11,9 @@
       ></sm-dayplanner-item>
 
       <sm-dayplanner-item-edit
-        [class.hidden]="!showNewItemForm"
+        *ngIf="showNewItemForm"
         [collection]="collection"
-        (submitted)="showNewItemForm = false"
+        (exit)="showNewItemForm = false"
       >
       </sm-dayplanner-item-edit>
     </mat-list>

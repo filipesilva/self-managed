@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
-import { parseItemString } from '../date-number-utils';
+import { parseItemString, itemToItemString } from '../date-number-utils';
 
 @Component({
   selector: 'sm-dayplanner-item-edit',
@@ -13,12 +13,14 @@ import { parseItemString } from '../date-number-utils';
           [floatLabel]="'never'"
         >
           <input
+            #itemInput
             matInput
             type="text"
             id="itemString"
             name="itemString"
             placeholder="New item"
             [(ngModel)]="itemString"
+            (blur)="exit.emit()"
           >
         </mat-form-field>
       </form>
@@ -36,13 +38,21 @@ import { parseItemString } from '../date-number-utils';
     }
   `]
 })
-export class DayplannerItemEditComponent {
+export class DayplannerItemEditComponent implements OnInit {
   @Input() item?: DayplannerItem;
   @Input() collection: AngularFirestoreCollection<RawDayplannerItem>;
-  @Output() submitted: EventEmitter<void> = new EventEmitter();
+  @Output() exit: EventEmitter<void> = new EventEmitter();
+  @ViewChild('itemInput') itemInputField: ElementRef;
   itemString: string;
 
   constructor() { }
+
+  ngOnInit() {
+    if (this.item) {
+      this.itemString = itemToItemString(this.item);
+    }
+    this.itemInputField.nativeElement.focus();
+  }
 
   onSubmit() {
     const rawItem = parseItemString(this.itemString);
@@ -51,6 +61,6 @@ export class DayplannerItemEditComponent {
     } else {
       this.collection.add(rawItem);
     }
-    this.submitted.emit();
+    this.exit.emit();
   }
 }

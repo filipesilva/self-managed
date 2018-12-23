@@ -24,6 +24,7 @@ export class DayplannerItemComponent implements OnInit {
   @Input() ticker?: Observable<number>;
   @Input() state: Observable<DayplannerItemComponentState> =
     of(DayplannerItemComponentState.Upcoming);
+  showEditForm = false;
 
   ngOnInit() {
     if (this.ticker) {
