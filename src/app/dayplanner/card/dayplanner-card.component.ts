@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import {
   AngularFirestore,
   DocumentChangeAction,
@@ -15,7 +15,7 @@ import { dateToTimeNumber, getTodayDateString, dateStringToDate } from '../date-
 @Component({
   selector: 'sm-dayplanner-card',
   templateUrl: './dayplanner-card.component.html',
-  styleUrls: ['./dayplanner-card.component.css']
+  styleUrls: ['./dayplanner-card.component.css'],
 })
 export class DayplannerCardComponent implements OnInit {
   day: Date;
@@ -43,6 +43,12 @@ export class DayplannerCardComponent implements OnInit {
     this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => this.mapToItems(actions)),
     );
+  }
+
+  @HostListener('window:keyup.enter', ['$event'])
+  toggleNewItemForm(event?: KeyboardEvent) {
+    if (event) { event.stopPropagation(); }
+    this.showNewItemForm = !this.showNewItemForm;
   }
 
   // Map a RawDayplannerItem action to include the id and expected end time.

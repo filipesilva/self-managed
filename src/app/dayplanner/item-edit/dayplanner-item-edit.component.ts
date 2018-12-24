@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { parseItemString, itemToItemString } from '../date-number-utils';
@@ -61,6 +61,20 @@ export class DayplannerItemEditComponent implements OnInit {
     } else {
       this.collection.add(rawItem);
     }
+    this.emitExit();
+  }
+
+  @HostListener('document:keyup.escape', ['$event'])
+  emitExit(event?: KeyboardEvent) {
+    if (event) { event.stopPropagation(); }
     this.exit.emit();
+  }
+
+  // Need to capture enter on the input and stop it from propagating further, otherwise
+  // it will trigger keybinds on the dayplanner.
+  // Would be good to have a better abstraction for this.
+  @HostListener('document:keyup.enter', ['$event'])
+  captureEnter(event?: KeyboardEvent) {
+    if (event) { event.stopPropagation(); }
   }
 }
