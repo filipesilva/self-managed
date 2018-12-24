@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef, 
 import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { parseItemString, itemToItemString } from '../date-number-utils';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'sm-dayplanner-item-edit',
@@ -15,13 +16,12 @@ import { parseItemString, itemToItemString } from '../date-number-utils';
           <input
             #itemInput
             matInput
+            [formControl]="itemFormControl"
             type="text"
-            id="itemString"
-            name="itemString"
-            placeholder="New item"
-            [(ngModel)]="itemString"
+            placeholder="I intend to..."
             (blur)="exit.emit()"
           >
+          <mat-error>You must enter something</mat-error>
         </mat-form-field>
       </form>
     </mat-list-item>
@@ -43,25 +43,27 @@ export class DayplannerItemEditComponent implements OnInit {
   @Input() collection: AngularFirestoreCollection<RawDayplannerItem>;
   @Output() exit: EventEmitter<void> = new EventEmitter();
   @ViewChild('itemInput') itemInputField: ElementRef;
-  itemString: string;
+  itemFormControl = new FormControl('', [Validators.required]);
 
   constructor() { }
 
   ngOnInit() {
     if (this.item) {
-      this.itemString = itemToItemString(this.item);
+      this.itemFormControl.setValue(itemToItemString(this.item));
     }
     this.itemInputField.nativeElement.focus();
   }
 
   onSubmit() {
-    const rawItem = parseItemString(this.itemString);
-    if (this.item) {
-      this.collection.doc(this.item.id).update(rawItem);
-    } else {
-      this.collection.add(rawItem);
+    if (this.itemFormControl.valid) {
+      const rawItem = parseItemString(this.itemFormControl.value);
+      if (this.item) {
+        this.collection.doc(this.item.id).update(rawItem);
+      } else {
+        this.collection.add(rawItem);
+      }
+      this.emitExit();
     }
-    this.emitExit();
   }
 
   @HostListener('document:keyup.escape', ['$event'])
