@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import {
   AngularFirestore,
   DocumentChangeAction,
@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-models';
 import { dateToTimeNumber, getTodayDateString, dateStringToDate } from '../date-number-utils';
+import { DayplannerItemComponent } from '../item/dayplanner-item.component';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class DayplannerCardComponent implements OnInit {
   ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => dateToTimeNumber(date)));
   items$: Observable<DayplannerItem[]>;
   collection: AngularFirestoreCollection<RawDayplannerItem>;
-  showNewItemForm = false;
+  @ViewChild('emptyItem') emptyItem: DayplannerItemComponent;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute) { }
 
@@ -46,9 +47,9 @@ export class DayplannerCardComponent implements OnInit {
   }
 
   @HostListener('window:keyup.enter', ['$event'])
-  toggleNewItemForm(event?: KeyboardEvent) {
+  addNewItem(event?: KeyboardEvent) {
     if (event) { event.stopPropagation(); }
-    this.showNewItemForm = !this.showNewItemForm;
+    this.emptyItem.showEditForm();
   }
 
   // Map a RawDayplannerItem action to include the id and expected end time.

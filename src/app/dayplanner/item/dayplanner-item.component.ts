@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
@@ -20,11 +20,11 @@ enum DayplannerItemComponentState {
 })
 export class DayplannerItemComponent implements OnInit {
   @Input() collection: AngularFirestoreCollection<RawDayplannerItem>;
-  @Input() item: DayplannerItem;
+  @Input() item?: DayplannerItem;
   @Input() ticker?: Observable<number>;
   @Input() state: Observable<DayplannerItemComponentState> =
     of(DayplannerItemComponentState.Upcoming);
-  showEditForm = false;
+  editFormVisible = false;
 
   ngOnInit() {
     if (this.ticker) {
@@ -33,7 +33,15 @@ export class DayplannerItemComponent implements OnInit {
   }
 
   delete() {
-    this.collection.doc(this.item.id).delete();
+    if (this.item) {
+      this.collection.doc(this.item.id).delete();
+    }
+  }
+
+  @HostListener('click', ['$event'])
+  showEditForm(event?: Event) {
+    if (event) { event.stopPropagation(); }
+    this.editFormVisible = true;
   }
 
   private getStateForDate(time: number): DayplannerItemComponentState {

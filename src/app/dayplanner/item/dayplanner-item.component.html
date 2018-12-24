@@ -1,16 +1,16 @@
-<div *ngIf="showEditForm; then thenBlock else elseBlock"></div>
+<div *ngIf="editFormVisible; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
   <sm-dayplanner-item-edit
     [item]="item"
     [collection]="collection"
-    (exit)="showEditForm = false"
+    (exit)="editFormVisible = false"
   >
   </sm-dayplanner-item-edit>
 </ng-template>
 <ng-template #elseBlock>
   <mat-list-item
     class="item"
-    (click)="showEditForm = true"
+    *ngIf="item; else empty"
   >
     <div [ngClass]="this.state | async">
       <span *ngIf="item.startTime">{{item.startTime | timeNumber}} -&nbsp;</span>
@@ -34,4 +34,7 @@
       </button>
     </div>
   </mat-list-item>
+  <ng-template #empty>
+    <mat-list-item></mat-list-item>
+  </ng-template>
 </ng-template>

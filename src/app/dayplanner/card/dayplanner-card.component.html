@@ -11,12 +11,10 @@
         [ticker]="ticker"
       ></sm-dayplanner-item>
 
-      <sm-dayplanner-item-edit
-        *ngIf="showNewItemForm"
+      <sm-dayplanner-item
+        #emptyItem
         [collection]="collection"
-        (exit)="showNewItemForm = false"
-      >
-      </sm-dayplanner-item-edit>
+      ></sm-dayplanner-item>
     </mat-list>
 
     <ng-template #loading>
@@ -50,7 +48,7 @@
       mat-icon-button
       matTooltip="Add a new item [Enter]"
       aria-label="Shows a form to add new items"
-      (click)="showNewItemForm = !showNewItemForm"
+      (click)="addNewItem()"
     >
       <mat-icon aria-label="Add a new item to the Dayplan">add</mat-icon>
     </button>
