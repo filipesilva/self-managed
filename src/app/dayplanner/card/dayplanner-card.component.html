@@ -19,7 +19,14 @@
       </sm-dayplanner-item-edit>
     </mat-list>
 
-    <ng-template #loading>Loading&hellip;</ng-template>
+    <ng-template #loading>
+      <div style="display: flex;">
+        <mat-spinner
+          style="margin: auto;"
+          diameter="50"
+        ></mat-spinner>
+      </div>
+    </ng-template>
 
   </mat-card-content>
 
