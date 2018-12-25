@@ -17,6 +17,6 @@
   visibility: hidden;
 }
 
-.item:hover .actions {
+.selected .actions {
   visibility: visible;
 }

@@ -1,15 +1,15 @@
-<div *ngIf="editFormVisible; then thenBlock else elseBlock"></div>
+<div *ngIf="editMode; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
   <sm-dayplanner-item-edit
     [item]="item"
     [collection]="collection"
-    (exit)="editFormVisible = false"
+    (exit)="editMode = false"
   >
   </sm-dayplanner-item-edit>
 </ng-template>
 <ng-template #elseBlock>
   <mat-list-item
-    class="item"
+    [ngClass]="{ 'selected': selected }"
     *ngIf="item; else empty"
   >
     <div [ngClass]="this.state | async">

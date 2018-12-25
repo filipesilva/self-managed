@@ -1,11 +1,11 @@
-import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import {
   AngularFirestore,
   DocumentChangeAction,
   AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-models';
@@ -23,8 +23,10 @@ export class DayplannerCardComponent implements OnInit {
   // TODO: should tick every 5m.
   ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => dateToTimeNumber(date)));
   items$: Observable<DayplannerItem[]>;
+  itemsSnapshot: DayplannerItem[] | null = null;
   collection: AngularFirestoreCollection<RawDayplannerItem>;
   @ViewChild('emptyItem') emptyItem: DayplannerItemComponent;
+  selectedItem: DayplannerItem | null = null;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute) { }
 
@@ -43,6 +45,7 @@ export class DayplannerCardComponent implements OnInit {
 
     this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => this.mapToItems(actions)),
+      tap(items => this.itemsSnapshot = items),
     );
   }
 
@@ -50,6 +53,46 @@ export class DayplannerCardComponent implements OnInit {
   addNewItem(event?: KeyboardEvent) {
     if (event) { event.stopPropagation(); }
     this.emptyItem.showEditForm();
+  }
+
+  selectItem(item: DayplannerItem) {
+    this.selectedItem = item;
+  }
+
+  deselectItem(item: DayplannerItem) {
+    if (this.selectedItem = item) {
+      this.selectedItem = null;
+    }
+  }
+
+  @HostListener('window:keyup.arrowdown')
+  selectNextItem() {
+    if (this.itemsSnapshot) {
+      if (this.selectedItem === null) {
+        this.selectedItem = this.itemsSnapshot[0];
+      } else {
+        const currIdx = this.itemsSnapshot.indexOf(this.selectedItem);
+        const nextIdx = (currIdx + 1) % this.itemsSnapshot.length;
+        this.selectedItem = this.itemsSnapshot[nextIdx];
+      }
+    }
+  }
+
+  @HostListener('window:keyup.arrowup')
+  selectPreviousItem() {
+    if (this.itemsSnapshot) {
+      if (this.selectedItem === null) {
+        this.selectedItem = this.itemsSnapshot[this.itemsSnapshot.length - 1];
+      } else {
+        const currIdx = this.itemsSnapshot.indexOf(this.selectedItem);
+        const prevIdx = this.positiveModulo((currIdx - 1), this.itemsSnapshot.length);
+        this.selectedItem = this.itemsSnapshot[prevIdx];
+      }
+    }
+  }
+
+  private positiveModulo(i: number, n: number) {
+    return (i % n + n) % n;
   }
 
   // Map a RawDayplannerItem action to include the id and expected end time.

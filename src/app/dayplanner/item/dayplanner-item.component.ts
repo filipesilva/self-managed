@@ -24,7 +24,8 @@ export class DayplannerItemComponent implements OnInit {
   @Input() ticker?: Observable<number>;
   @Input() state: Observable<DayplannerItemComponentState> =
     of(DayplannerItemComponentState.Upcoming);
-  editFormVisible = false;
+  @Input() selected = false;
+  editMode = false;
 
   ngOnInit() {
     if (this.ticker) {
@@ -41,7 +42,7 @@ export class DayplannerItemComponent implements OnInit {
   @HostListener('click', ['$event'])
   showEditForm(event?: Event) {
     if (event) { event.stopPropagation(); }
-    this.editFormVisible = true;
+    this.editMode = true;
   }
 
   private getStateForDate(time: number): DayplannerItemComponentState {
