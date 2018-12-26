@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-models';
 import { dateToTimeNumber, getTodayDateString, dateStringToDate } from '../date-number-utils';
 import { DayplannerItemComponent } from '../item/dayplanner-item.component';
+import { isEventFromInput } from '../keyboard-event-utils';
 
 
 @Component({
@@ -23,7 +24,6 @@ export class DayplannerCardComponent implements OnInit {
   // TODO: should tick every 5m.
   ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => dateToTimeNumber(date)));
   items$: Observable<DayplannerItem[]>;
-  itemsSnapshot: DayplannerItem[] | null = null;
   collection: AngularFirestoreCollection<RawDayplannerItem>;
   @ViewChild('emptyItem') emptyItem: DayplannerItemComponent;
   @ViewChildren(DayplannerItemComponent) itemComponents: QueryList<DayplannerItemComponent>;
@@ -45,7 +45,6 @@ export class DayplannerCardComponent implements OnInit {
 
     this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => this.mapToItems(actions)),
-      tap(items => this.itemsSnapshot = items),
     );
   }
 
@@ -59,8 +58,16 @@ export class DayplannerCardComponent implements OnInit {
     if (item) { item.selected = false; }
   }
 
-  @HostListener('document:keydown.enter')
-  addNewItem() {
+  @HostListener('document:keydown.enter', ['$event'])
+  addNewItem(event?: KeyboardEvent) {
+    if (event) {
+      // It's going to become tedious and error prone to always avoid input events.
+      // Consider making a new decorator that takes care of this, plus preventDefault/stopPropagation.
+      if (isEventFromInput(event)) { return; }
+      // Stop the form from trying to submit on enter keydown.
+      event.preventDefault();
+    }
+
     let selected = this.itemComponents.find(i => i.selected);
     if (!selected) { selected = this.emptyItem; }
     selected.showEditForm();
@@ -76,11 +83,17 @@ export class DayplannerCardComponent implements OnInit {
     this.itemComponents.filter(i => i.selected).forEach(i => i.selected = false);
   }
 
-  @HostListener('document:keydown.arrowdown')
-  selectNextItem() { this.selectItemDelta(+1); }
+  @HostListener('document:keydown.arrowdown', ['$event'])
+  selectNextItem(event: KeyboardEvent) {
+    if (isEventFromInput(event)) { return; }
+    this.selectItemDelta(+1);
+  }
 
-  @HostListener('document:keydown.arrowup')
-  selectPreviousItem() { this.selectItemDelta(-1); }
+  @HostListener('document:keydown.arrowup', ['$event'])
+  selectPreviousItem(event: KeyboardEvent) {
+    if (isEventFromInput(event)) { return; }
+    this.selectItemDelta(-1);
+  }
 
   private findItemByEventTarget(eventTarget: EventTarget) {
     return this.itemComponents.find(i => i.element.nativeElement === eventTarget);
