@@ -61,7 +61,7 @@ export class DayplannerCardComponent implements OnInit {
   @HostListener('document:keydown.enter', ['$event'])
   @Keybind()
   addNewItem() {
-    let selected = this.itemComponents.find(i => i.selected);
+    let selected = this.getSelectedItem();
     if (!selected) { selected = this.emptyItem; }
     selected.showEditForm();
   }
@@ -87,6 +87,17 @@ export class DayplannerCardComponent implements OnInit {
   @Keybind()
   selectPreviousItem() {
     this.selectItemDelta(-1);
+  }
+
+  @HostListener('document:keydown.delete', ['$event'])
+  @Keybind()
+  deleteSelectedItem() {
+    const selected = this.getSelectedItem();
+    if (selected) { selected.delete(); }
+  }
+
+  private getSelectedItem() {
+    return this.itemComponents.find(i => i.selected);
   }
 
   private findItemByEventTarget(eventTarget: EventTarget) {
