@@ -68,29 +68,28 @@ export class DayplannerCardComponent implements OnInit {
 
   @HostListener('window:keyup.arrowdown')
   selectNextItem() {
-    if (this.itemsSnapshot) {
-      if (this.selectedItem === null) {
-        this.selectedItem = this.itemsSnapshot[0];
-      } else {
-        const currIdx = this.itemsSnapshot.indexOf(this.selectedItem);
-        const nextIdx = (currIdx + 1) % this.itemsSnapshot.length;
-        this.selectedItem = this.itemsSnapshot[nextIdx];
-      }
-    }
+    this.selectItemDelta(+1);
   }
 
   @HostListener('window:keyup.arrowup')
   selectPreviousItem() {
+    this.selectItemDelta(-1);
+  }
+
+  private selectItemDelta(delta: number) {
     if (this.itemsSnapshot) {
+      let newIdx: number;
       if (this.selectedItem === null) {
-        this.selectedItem = this.itemsSnapshot[this.itemsSnapshot.length - 1];
+        // For +1 delta we want to select 0, for -1 delta we want to select len-1;
+        newIdx = delta > 0 ? delta - 1 : this.itemsSnapshot.length + delta;
       } else {
         const currIdx = this.itemsSnapshot.indexOf(this.selectedItem);
-        const prevIdx = this.positiveModulo((currIdx - 1), this.itemsSnapshot.length);
-        this.selectedItem = this.itemsSnapshot[prevIdx];
+        newIdx = this.positiveModulo((currIdx + delta), this.itemsSnapshot.length);
       }
+      this.selectItem(this.itemsSnapshot[newIdx]);
     }
   }
+
 
   private positiveModulo(i: number, n: number) {
     return (i % n + n) % n;
