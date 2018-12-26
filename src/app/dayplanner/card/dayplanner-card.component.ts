@@ -27,6 +27,7 @@ export class DayplannerCardComponent implements OnInit {
   collection: AngularFirestoreCollection<RawDayplannerItem>;
   @ViewChild('emptyItem') emptyItem: DayplannerItemComponent;
   @ViewChildren(DayplannerItemComponent) itemComponents: QueryList<DayplannerItemComponent>;
+  selectedItemId: string | null = null;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute) { }
 
@@ -67,14 +68,13 @@ export class DayplannerCardComponent implements OnInit {
   }
 
   selectItem(item: DayplannerItemComponent) {
-    this.deselectItems();
-    item.selected = true;
+    if (item.id) { this.selectedItemId = item.id; }
   }
 
   @HostListener('document:keydown.escape', ['$event'])
   @Keybind()
   deselectItems() {
-    this.itemComponents.filter(i => i.selected).forEach(i => i.selected = false);
+    this.selectedItemId = null;
   }
 
   @HostListener('document:keydown.arrowdown', ['$event'])

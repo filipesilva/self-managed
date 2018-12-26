@@ -29,6 +29,11 @@ export class DayplannerItemComponent implements OnInit {
 
   constructor(public element: ElementRef) { }
 
+  get id() {
+    if (this.item) { return this.item.id; }
+    return null;
+  }
+
   ngOnInit() {
     if (this.ticker) {
       this.state = this.ticker.pipe(map(time => this.getStateForDate(time)));
