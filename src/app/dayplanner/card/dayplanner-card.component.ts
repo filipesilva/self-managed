@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-models';
 import { dateToTimeNumber, getTodayDateString, dateStringToDate } from '../date-number-utils';
 import { DayplannerItemComponent } from '../item/dayplanner-item.component';
-import { isEventFromInput } from '../keyboard-event-utils';
+import { Keybind } from '../keybind.decorator';
 
 
 @Component({
@@ -59,15 +59,8 @@ export class DayplannerCardComponent implements OnInit {
   }
 
   @HostListener('document:keydown.enter', ['$event'])
-  addNewItem(event?: KeyboardEvent) {
-    if (event) {
-      // It's going to become tedious and error prone to always avoid input events.
-      // Consider making a new decorator that takes care of this, plus preventDefault/stopPropagation.
-      if (isEventFromInput(event)) { return; }
-      // Stop the form from trying to submit on enter keydown.
-      event.preventDefault();
-    }
-
+  @Keybind()
+  addNewItem() {
     let selected = this.itemComponents.find(i => i.selected);
     if (!selected) { selected = this.emptyItem; }
     selected.showEditForm();
@@ -78,20 +71,21 @@ export class DayplannerCardComponent implements OnInit {
     item.selected = true;
   }
 
-  @HostListener('document:keydown.escape')
+  @HostListener('document:keydown.escape', ['$event'])
+  @Keybind()
   deselectItems() {
     this.itemComponents.filter(i => i.selected).forEach(i => i.selected = false);
   }
 
   @HostListener('document:keydown.arrowdown', ['$event'])
-  selectNextItem(event: KeyboardEvent) {
-    if (isEventFromInput(event)) { return; }
+  @Keybind()
+  selectNextItem() {
     this.selectItemDelta(+1);
   }
 
   @HostListener('document:keydown.arrowup', ['$event'])
-  selectPreviousItem(event: KeyboardEvent) {
-    if (isEventFromInput(event)) { return; }
+  @Keybind()
+  selectPreviousItem() {
     this.selectItemDelta(-1);
   }
 

@@ -3,6 +3,7 @@ import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { parseItemString, itemToItemString } from '../date-number-utils';
 import { FormControl, Validators } from '@angular/forms';
+import { Keybind } from '../keybind.decorator';
 
 @Component({
   selector: 'sm-dayplanner-item-edit',
@@ -67,16 +68,8 @@ export class DayplannerItemEditComponent implements OnInit {
   }
 
   @HostListener('document:keydown.escape', ['$event'])
-  emitExit(event?: KeyboardEvent) {
-    if (event) { event.stopPropagation(); }
+  @Keybind({ preventInput: false })
+  emitExit() {
     this.exit.emit();
-  }
-
-  // Need to capture enter on the input and stop it from propagating further, otherwise
-  // it will trigger keybinds on the dayplanner.
-  // Would be good to have a better abstraction for this.
-  @HostListener('document:keydown', ['$event'])
-  captureEnter(event?: KeyboardEvent) {
-    if (event) { event.stopPropagation(); }
   }
 }
