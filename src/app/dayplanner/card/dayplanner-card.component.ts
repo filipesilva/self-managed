@@ -59,8 +59,9 @@ export class DayplannerCardComponent implements OnInit {
     this.selectedItem = item;
   }
 
-  deselectItem(item: DayplannerItem) {
-    if (this.selectedItem = item) {
+  @HostListener('window:keyup.escape')
+  deselectItem(item?: DayplannerItem) {
+    if (!item || this.selectedItem === item) {
       this.selectedItem = null;
     }
   }
