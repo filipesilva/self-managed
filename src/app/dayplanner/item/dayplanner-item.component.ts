@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, Input, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
@@ -27,6 +27,8 @@ export class DayplannerItemComponent implements OnInit {
   @Input() selected = false;
   editMode = false;
 
+  constructor(public element: ElementRef) { }
+
   ngOnInit() {
     if (this.ticker) {
       this.state = this.ticker.pipe(map(time => this.getStateForDate(time)));
@@ -39,11 +41,8 @@ export class DayplannerItemComponent implements OnInit {
     }
   }
 
-  @HostListener('click', ['$event'])
-  showEditForm(event?: Event) {
-    if (event) { event.stopPropagation(); }
-    this.editMode = true;
-  }
+  @HostListener('click')
+  showEditForm() { this.editMode = true; }
 
   private getStateForDate(time: number): DayplannerItemComponentState {
     if (this.item.startTime === null) {

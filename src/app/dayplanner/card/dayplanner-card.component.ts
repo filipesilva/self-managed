@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import {
   AngularFirestore,
   DocumentChangeAction,
@@ -26,7 +26,7 @@ export class DayplannerCardComponent implements OnInit {
   itemsSnapshot: DayplannerItem[] | null = null;
   collection: AngularFirestoreCollection<RawDayplannerItem>;
   @ViewChild('emptyItem') emptyItem: DayplannerItemComponent;
-  selectedItem: DayplannerItem | null = null;
+  @ViewChildren(DayplannerItemComponent) itemComponents: QueryList<DayplannerItemComponent>;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute) { }
 
@@ -49,47 +49,61 @@ export class DayplannerCardComponent implements OnInit {
     );
   }
 
-  @HostListener('window:keyup.enter', ['$event'])
-  addNewItem(event?: KeyboardEvent) {
-    if (event) { event.stopPropagation(); }
-    this.emptyItem.showEditForm();
+  selectMouseTarget(target: EventTarget) {
+    const item = this.findItemByEventTarget(target);
+    if (item) { this.selectItem(item); }
   }
 
-  selectItem(item: DayplannerItem) {
-    this.selectedItem = item;
+  deselectMouseTarget(target: EventTarget) {
+    const item = this.findItemByEventTarget(target);
+    if (item) { item.selected = false; }
   }
 
-  @HostListener('window:keyup.escape')
-  deselectItem(item?: DayplannerItem) {
-    if (!item || this.selectedItem === item) {
-      this.selectedItem = null;
-    }
+  @HostListener('document:keydown.enter')
+  addNewItem() {
+    let selected = this.itemComponents.find(i => i.selected);
+    if (!selected) { selected = this.emptyItem; }
+    selected.showEditForm();
   }
 
-  @HostListener('window:keyup.arrowdown')
-  selectNextItem() {
-    this.selectItemDelta(+1);
+  selectItem(item: DayplannerItemComponent) {
+    this.deselectItems();
+    item.selected = true;
   }
 
-  @HostListener('window:keyup.arrowup')
-  selectPreviousItem() {
-    this.selectItemDelta(-1);
+  @HostListener('document:keydown.escape')
+  deselectItems() {
+    this.itemComponents.filter(i => i.selected).forEach(i => i.selected = false);
+  }
+
+  @HostListener('document:keydown.arrowdown')
+  selectNextItem() { this.selectItemDelta(+1); }
+
+  @HostListener('document:keydown.arrowup')
+  selectPreviousItem() { this.selectItemDelta(-1); }
+
+  private findItemByEventTarget(eventTarget: EventTarget) {
+    return this.itemComponents.find(i => i.element.nativeElement === eventTarget);
   }
 
   private selectItemDelta(delta: number) {
-    if (this.itemsSnapshot) {
+    // We don't want to cycle through the empty item.
+    const items = this.itemComponents.toArray().filter(i => i !== this.emptyItem);
+
+    if (items.length > 0) {
+      const selected = items.find(i => i.selected);
       let newIdx: number;
-      if (this.selectedItem === null) {
+      if (!selected) {
         // For +1 delta we want to select 0, for -1 delta we want to select len-1;
-        newIdx = delta > 0 ? delta - 1 : this.itemsSnapshot.length + delta;
+        newIdx = delta > 0 ? delta - 1 : items.length + delta;
       } else {
-        const currIdx = this.itemsSnapshot.indexOf(this.selectedItem);
-        newIdx = this.positiveModulo((currIdx + delta), this.itemsSnapshot.length);
+        const currIdx = items.indexOf(selected);
+        newIdx = this.positiveModulo((currIdx + delta), items.length);
       }
-      this.selectItem(this.itemsSnapshot[newIdx]);
+
+      this.selectItem(items[newIdx]);
     }
   }
-
 
   private positiveModulo(i: number, n: number) {
     return (i % n + n) % n;

@@ -19,7 +19,7 @@ import { FormControl, Validators } from '@angular/forms';
             [formControl]="itemFormControl"
             type="text"
             placeholder="I intend to..."
-            (blur)="exit.emit()"
+            (blur)="emitExit()"
           >
           <mat-error>You must enter something</mat-error>
         </mat-form-field>
@@ -66,7 +66,7 @@ export class DayplannerItemEditComponent implements OnInit {
     }
   }
 
-  @HostListener('document:keyup.escape', ['$event'])
+  @HostListener('document:keydown.escape', ['$event'])
   emitExit(event?: KeyboardEvent) {
     if (event) { event.stopPropagation(); }
     this.exit.emit();
@@ -75,7 +75,7 @@ export class DayplannerItemEditComponent implements OnInit {
   // Need to capture enter on the input and stop it from propagating further, otherwise
   // it will trigger keybinds on the dayplanner.
   // Would be good to have a better abstraction for this.
-  @HostListener('document:keyup.enter', ['$event'])
+  @HostListener('document:keydown', ['$event'])
   captureEnter(event?: KeyboardEvent) {
     if (event) { event.stopPropagation(); }
   }

@@ -9,9 +9,8 @@
         [collection]="collection"
         [item]="item"
         [ticker]="ticker"
-        [selected]="selectedItem === item"
-        (mouseenter) ="selectItem(item)"
-        (mouseleave) ="deselectItem(item)"
+        (mouseenter)="selectMouseTarget($event.target)"
+        (mouseleave)="deselectMouseTarget($event.target)"
       ></sm-dayplanner-item>
 
       <sm-dayplanner-item
