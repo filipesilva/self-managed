@@ -3,6 +3,7 @@
   <sm-dayplanner-item-edit
     [item]="item"
     [collection]="collection"
+    [dayTimestamp]="dayTimestamp"
     (exit)="editMode = false"
   >
   </sm-dayplanner-item-edit>
@@ -12,10 +13,7 @@
     [ngClass]="{ 'selected': selected }"
     *ngIf="item; else empty"
   >
-    <div [ngClass]="this.state | async">
-      <span *ngIf="item.startTime">{{item.startTime | timeNumber}} -&nbsp;</span>
-      {{item.content}}
-    </div>
+    <div [ngClass]="this.state | async"> {{item.toString()}} </div>
     <div class="actions">
       <button
         mat-icon-button

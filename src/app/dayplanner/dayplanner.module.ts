@@ -17,7 +17,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DayplannerRoutingModule } from './dayplanner-routing.module';
 import { DayplannerCardComponent } from './card/dayplanner-card.component';
 import { DayplannerItemComponent } from './item/dayplanner-item.component';
-import { TimeNumberPipe } from './time-number/time-number.pipe';
 import { DayplannerItemEditComponent } from './item-edit/dayplanner-item-edit.component';
 
 
@@ -46,7 +45,6 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   declarations: [
     DayplannerCardComponent,
     DayplannerItemComponent,
-    TimeNumberPipe,
     DayplannerItemEditComponent,
   ],
   providers: [

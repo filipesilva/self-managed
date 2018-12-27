@@ -6,16 +6,17 @@
     <mat-list *ngIf="items$ | async as items; else loading">
       <sm-dayplanner-item
         *ngFor="let item of items"
-        [collection]="collection"
+        [dayTimestamp]="dayTimestamp"
         [item]="item"
         [ticker]="ticker"
         [selected]="item.id === selectedItemId"
-        (mouseenter)="selectMouseTarget($event.target)"
-        (mouseleave)="deselectMouseTarget($event.target)"
+        (mouseenter)="selectItem(item)"
+        (mouseleave)="delectIfSelected(item)"
       ></sm-dayplanner-item>
 
       <sm-dayplanner-item
         #emptyItem
+        [dayTimestamp]="dayTimestamp"
         [collection]="collection"
       ></sm-dayplanner-item>
     </mat-list>
@@ -39,7 +40,7 @@
     >
       <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
     </button>
-    <button mat-button>{{day | date:"dd/MM/yyyy"}}</button>
+    <button mat-button>{{dayTimestamp | date:"dd/MM/yyyy"}}</button>
     <button
       mat-icon-button
       matTooltip="Next day"
@@ -51,7 +52,7 @@
       mat-icon-button
       matTooltip="Add a new item [Enter]"
       aria-label="Shows a form to add new items"
-      (click)="addNewItem()"
+      (click)="editOrNew()"
     >
       <mat-icon aria-label="Add a new item to the Dayplan">add</mat-icon>
     </button>

@@ -1,9 +1,19 @@
-import { Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { DayplannerItem, RawDayplannerItem } from '../dayplanner-models';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  HostListener,
+} from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
-import { parseItemString, itemToItemString } from '../date-number-utils';
 import { FormControl, Validators } from '@angular/forms';
+
+import { DayplannerItem, RawDayplannerItem } from '../dayplanner-item';
 import { Keybind } from '../keybind.decorator';
+
 
 @Component({
   selector: 'sm-dayplanner-item-edit',
@@ -40,8 +50,11 @@ import { Keybind } from '../keybind.decorator';
   `]
 })
 export class DayplannerItemEditComponent implements OnInit {
+  // This component should have either an item or a collection.
+  // TODO: consider some other way of getting the collection, like the current user collections.
   @Input() item?: DayplannerItem;
-  @Input() collection: AngularFirestoreCollection<RawDayplannerItem>;
+  @Input() collection?: AngularFirestoreCollection<RawDayplannerItem> | null = null;
+  @Input() dayTimestamp: number | null = null;
   @Output() exit: EventEmitter<void> = new EventEmitter();
   @ViewChild('itemInput') itemInputField: ElementRef;
   itemFormControl = new FormControl('', [Validators.required]);
@@ -50,18 +63,20 @@ export class DayplannerItemEditComponent implements OnInit {
 
   ngOnInit() {
     if (this.item) {
-      this.itemFormControl.setValue(itemToItemString(this.item));
+      this.itemFormControl.setValue(this.item.toString());
     }
     this.itemInputField.nativeElement.focus();
   }
 
   onSubmit() {
     if (this.itemFormControl.valid) {
-      const rawItem = parseItemString(this.itemFormControl.value);
+      const rawItem = DayplannerItem.parseItemString(this.itemFormControl.value, this.dayTimestamp);
       if (this.item) {
-        this.collection.doc(this.item.id).update(rawItem);
-      } else {
+        this.item.update(rawItem);
+      } else if (this.collection) {
         this.collection.add(rawItem);
+      } else {
+        // TODO: emit error?
       }
       this.emitExit();
     }
