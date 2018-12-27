@@ -30,9 +30,7 @@ export class DayplannerCardComponent implements OnInit {
   ngOnInit() {
     // TODO: use current user id.
     const userId = 'uzf2T6cgSOMcm1xdtfSliusIq7O2';
-    // TODO: use current id instead of 20190101 when CRUD ops are enabled.
-    // let day = this.route.snapshot.paramMap.get('id') || getTodayDateString();
-    this.dayTimestamp = Date.UTC(2019, 0, 1);
+    this.dayTimestamp = this.dateStringToTimestamp(this.route.snapshot.paramMap.get('id'));
     const today = new Date(this.dayTimestamp);
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
@@ -122,5 +120,22 @@ export class DayplannerCardComponent implements OnInit {
 
       return item;
     });
+  }
+
+  private dateStringToTimestamp(dateStr?: string): number {
+    if (!dateStr) {
+      dateStr = (new Date()).toISOString().slice(0, 10);
+    }
+
+    const dateFormat = /\d\d\d\d-\d\d-\d\d/;
+    if (dateFormat.test(dateStr)) {
+      try {
+        return Date.parse(dateStr);
+      } catch {
+        // TODO: find a good way to display this to the user.
+      }
+    }
+
+    return null;
   }
 }
