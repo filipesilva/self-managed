@@ -55,9 +55,9 @@ export class DayplannerItemEditComponent implements OnInit {
   @Input() item?: DayplannerItem;
   @Input() collection?: AngularFirestoreCollection<RawDayplannerItem> | null = null;
   @Input() dayTimestamp: number | null = null;
-  @Output() exit: EventEmitter<void> = new EventEmitter();
+  @Output() exit: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('itemInput') itemInputField: ElementRef;
-  itemFormControl = new FormControl('', [Validators.required]);
+  itemFormControl = new FormControl('');
 
   constructor() { }
 
@@ -69,7 +69,7 @@ export class DayplannerItemEditComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.itemFormControl.valid) {
+    if (this.itemFormControl.value !== '') {
       const rawItem = DayplannerItem.parseItemString(this.itemFormControl.value, this.dayTimestamp);
       if (this.item) {
         this.item.update(rawItem);
@@ -84,7 +84,8 @@ export class DayplannerItemEditComponent implements OnInit {
 
   @HostListener('document:keydown.escape', ['$event'])
   @Keybind({ preventInput: false })
-  emitExit() {
-    this.exit.emit();
+  emitExit(submitted = false) {
+    this.itemFormControl.reset();
+    this.exit.emit(submitted);
   }
 }

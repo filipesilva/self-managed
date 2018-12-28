@@ -14,6 +14,7 @@ export class DayplannerItemComponent implements OnInit {
   @Input() item?: DayplannerItem;
   @Input() ticker?: Observable<number>;
   @Input() selected = false;
+  @Input() forceEdit = false;
   @Input() dayTimestamp: number;
   @Input() collection?: AngularFirestoreCollection<RawDayplannerItem>;
   state: Observable<DayplannerItemComponentState> = of(DayplannerItemComponentState.Upcoming);
@@ -28,9 +29,19 @@ export class DayplannerItemComponent implements OnInit {
   }
 
   delete() {
-    if (this.item) { this.item.delete(); }
+    if (this.item) {
+      this.item.delete();
+    }
+  }
+
+  closeEdit(submitted: boolean) {
+    if (submitted || !this.forceEdit) {
+      this.editMode = false;
+    }
   }
 
   @HostListener('click')
-  showEditForm() { this.editMode = true; }
+  showEditForm() {
+    this.editMode = true;
+  }
 }

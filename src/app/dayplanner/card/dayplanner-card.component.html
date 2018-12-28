@@ -16,6 +16,7 @@
 
       <sm-dayplanner-item
         #emptyItem
+        [forceEdit]="itemsSnapshot.length === 0"
         [dayTimestamp]="dayTimestamp"
         [collection]="collection"
       ></sm-dayplanner-item>

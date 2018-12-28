@@ -1,10 +1,10 @@
-<div *ngIf="editMode; then thenBlock else elseBlock"></div>
+<div *ngIf="editMode || forceEdit; then thenBlock else elseBlock"></div>
 <ng-template #thenBlock>
   <sm-dayplanner-item-edit
     [item]="item"
     [collection]="collection"
     [dayTimestamp]="dayTimestamp"
-    (exit)="editMode = false"
+    (exit)="closeEdit($event)"
   >
   </sm-dayplanner-item-edit>
 </ng-template>
