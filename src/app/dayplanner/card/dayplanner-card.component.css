@@ -5,3 +5,12 @@
 .hidden {
   visibility: hidden;
 }
+
+mat-card-actions button {
+  opacity: 0.3;
+  transition: all 0.2s ease-in-out;
+}
+
+mat-card-actions button:hover {
+  opacity: 1;
+}
