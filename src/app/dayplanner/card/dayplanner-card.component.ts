@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
@@ -16,8 +16,8 @@ import { Keybind } from '../keybind.decorator';
 })
 export class DayplannerCardComponent implements OnInit {
   dayTimestamp: number;
-  // TODO: should tick every 5m.
-  ticker = of(new Date(2019, 0, 1, 13)).pipe(map(date => date.getTime()));
+  // TODO: make a single ticker for the whole app.
+  ticker = timer(0, 5 * 60 * 1000).pipe(map(() => Date.now()));
   items$: Observable<DayplannerItem[]>;
   itemsSnapshot: DayplannerItem[];
   collection: AngularFirestoreCollection<RawDayplannerItem>;
