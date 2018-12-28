@@ -8,7 +8,7 @@
 
 mat-card-actions button {
   opacity: 0.3;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
 mat-card-actions button:hover {
