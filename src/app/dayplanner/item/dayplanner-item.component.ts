@@ -40,7 +40,6 @@ export class DayplannerItemComponent implements OnInit {
     }
   }
 
-  @HostListener('click')
   showEditForm() {
     this.editMode = true;
   }

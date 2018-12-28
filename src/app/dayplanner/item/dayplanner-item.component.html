@@ -13,7 +13,13 @@
     [ngClass]="{ 'selected': selected }"
     *ngIf="item; else empty"
   >
-    <div [ngClass]="this.state | async"> {{item.toString()}} </div>
+    <div
+      class="content"
+      [ngClass]="this.state | async"
+      (click)="showEditForm()"
+    >
+      {{item.toString()}}
+    </div>
     <div class="actions">
       <button
         mat-icon-button

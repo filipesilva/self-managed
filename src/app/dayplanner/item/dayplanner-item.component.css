@@ -11,6 +11,10 @@
   font-weight: bolder;
 }
 
+.content {
+  flex-grow: 1;
+}
+
 .actions {
   margin-left: auto;
   flex-shrink: 0;
