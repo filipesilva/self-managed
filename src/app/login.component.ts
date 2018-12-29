@@ -1,26 +1,48 @@
-import { Component } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
+import { Component, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { UserService } from './user/user.service';
+
 
 @Component({
   template: `
-    <div *ngIf="afAuth.user | async as user; else showLogin">
-      <h1>Hello {{ user.displayName }}!</h1>
-      <button (click)="logout()">Logout</button>
-    </div>
-    <ng-template #showLogin>
-      <p>Please login.</p>
-      <button (click)="login()">Login with Google</button>
-    </ng-template>
+    <mat-card class="login-card">
+      <mat-card-title>
+        <i>Login</i>
+      </mat-card-title>
+
+      <mat-card-content>
+        <div *ngIf="userService.user | async as user; else showLogin">
+          <p>Logged in as  {{ user.displayName }}.</p>
+          <button mat-raised-button color="primary" (click)="logout()">
+            Logout
+          </button>
+        </div>
+        <ng-template #showLogin>
+          <button mat-raised-button color="primary" (click)="login()">
+            Login with Google
+          </button>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
   `,
+  styles: [`
+    .login-card {
+      width: 400px;
+    }
+  `]
 })
 export class LoginComponent {
-  constructor(public afAuth: AngularFireAuth) {
-  }
+  constructor(public userService: UserService, private _router: Router, private _ngZone: NgZone) { }
+
   login() {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    // _ngZone.run is needed because this promise seems to run outside zones, perhaps because
+    // of the Google login popup.
+    this.userService.login().then(() => this._ngZone.run(() => {
+      this._router.navigate([this.userService.popRedirectUrl() || '/dayplanner']);
+    }));
   }
   logout() {
-    this.afAuth.auth.signOut();
+    this.userService.logout();
   }
 }
