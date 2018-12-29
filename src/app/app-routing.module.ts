@@ -11,7 +11,7 @@ const routes: Routes = [
     loadChildren: './dayplanner/dayplanner.module#DayplannerModule',
     canActivate: [AuthGuard],
   },
-  { path: 'login', component: LoginComponent},
+  { path: 'login', component: LoginComponent },
   { path: '', redirectTo: '/dayplanner', pathMatch: 'full' },
 ];
 

@@ -1,8 +1,8 @@
-import { Component, OnInit, HostListener, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Component, HostListener, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable, timer } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-item';
 import { DayplannerItemComponent } from '../item/dayplanner-item.component';
@@ -15,7 +15,7 @@ import { UserService } from '../../user/user.service';
   templateUrl: './dayplanner-card.component.html',
   styleUrls: ['./dayplanner-card.component.css'],
 })
-export class DayplannerCardComponent implements OnInit {
+export class DayplannerCardComponent {
   dayTimestamp: number;
   // TODO: make a single ticker for the whole app.
   ticker = timer(0, 5 * 60 * 1000).pipe(map(() => Date.now()));
@@ -26,10 +26,16 @@ export class DayplannerCardComponent implements OnInit {
   @ViewChildren(DayplannerItemComponent) itemComponents: QueryList<DayplannerItemComponent>;
   selectedItemId: string | null = null;
 
-  constructor(private _userService: UserService, private route: ActivatedRoute) { }
+  constructor(
+    private _userService: UserService,
+    private _route: ActivatedRoute,
+    private _router: Router,
+  ) {
+    this._route.params.subscribe(() => this.load());
+  }
 
-  ngOnInit() {
-    this.dayTimestamp = this.dateStringToTimestamp(this.route.snapshot.paramMap.get('id'));
+  load() {
+    this.dayTimestamp = this.dateStringToTimestamp(this._route.snapshot.paramMap.get('id'));
     this.collection = this._userService.getDayplannerItemsCollectionForDay(this.dayTimestamp);
 
     this.items$ = this.collection.snapshotChanges().pipe(
@@ -80,10 +86,23 @@ export class DayplannerCardComponent implements OnInit {
     if (selected) { selected.delete(); }
   }
 
-  private selectItemDelta(delta: number) {
-    // We don't want to cycle through the empty item.
-    // const items = this.itemComponents.toArray().filter(i => i !== this.emptyItem);
+  @HostListener('document:keydown.arrowleft', ['$event'])
+  @Keybind()
+  previousDay() {
+    const previousDayTimestamp = this.dayTimestamp - 24 * 60 * 60 * 1000;
+    const previousDayStr = (new Date(previousDayTimestamp)).toISOString().slice(0, 10);
+    this._router.navigate(['/dayplanner', previousDayStr]);
+  }
 
+  @HostListener('document:keydown.arrowright', ['$event'])
+  @Keybind()
+  nextDay() {
+    const nextDayTimestamp = this.dayTimestamp + 24 * 60 * 60 * 1000;
+    const nextDayStr = (new Date(nextDayTimestamp)).toISOString().slice(0, 10);
+    this._router.navigate(['/dayplanner', nextDayStr]);
+  }
+
+  private selectItemDelta(delta: number) {
     if (this.itemsSnapshot.length > 0) {
       const currIdx = this.itemsSnapshot.findIndex(i => i.id === this.selectedItemId);
       let newIdx: number;
