@@ -32,7 +32,7 @@ import { UserService } from './user/user.service';
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
   ],
-  providers: [UserService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

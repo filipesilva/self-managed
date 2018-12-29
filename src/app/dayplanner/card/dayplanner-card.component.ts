@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-item';
 import { DayplannerItemComponent } from '../item/dayplanner-item.component';
 import { Keybind } from '../keybind.decorator';
+import { UserService } from '../../user/user.service';
 
 
 @Component({
@@ -25,22 +26,11 @@ export class DayplannerCardComponent implements OnInit {
   @ViewChildren(DayplannerItemComponent) itemComponents: QueryList<DayplannerItemComponent>;
   selectedItemId: string | null = null;
 
-  constructor(private afs: AngularFirestore, private route: ActivatedRoute) { }
+  constructor(private _userService: UserService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    // TODO: use current user id.
-    const userId = 'uzf2T6cgSOMcm1xdtfSliusIq7O2';
     this.dayTimestamp = this.dateStringToTimestamp(this.route.snapshot.paramMap.get('id'));
-    const today = new Date(this.dayTimestamp);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    this.collection = this.afs.collection<RawDayplannerItem>(
-      `/users/${userId}/dayplannerItems`,
-      ref => ref.where('timestamp', '>=', today.getTime())
-        .where('timestamp', '<', tomorrow.getTime())
-        .orderBy('timestamp')
-    );
+    this.collection = this._userService.getDayplannerItemsCollectionForDay(this.dayTimestamp);
 
     this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => actions.map(a => new DayplannerItem(a, this.collection))),
@@ -122,11 +112,7 @@ export class DayplannerCardComponent implements OnInit {
     });
   }
 
-  private dateStringToTimestamp(dateStr?: string): number {
-    if (!dateStr) {
-      dateStr = (new Date()).toISOString().slice(0, 10);
-    }
-
+  private dateStringToTimestamp(dateStr: string): number {
     const dateFormat = /\d\d\d\d-\d\d-\d\d/;
     if (dateFormat.test(dateStr)) {
       try {

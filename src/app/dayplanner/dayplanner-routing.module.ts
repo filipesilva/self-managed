@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { DayplannerCardComponent } from './card/dayplanner-card.component';
+import { CurrentDayRedirectGuard } from './current-day-redirect.guard';
+
 
 const routes: Routes = [
-  // TODO: there's probably a better way to declare with and without parameter routes.
-  { path: '', component: DayplannerCardComponent },
+  { path: '', canActivate: [CurrentDayRedirectGuard] },
   { path: ':id', component: DayplannerCardComponent }
 ];
 
