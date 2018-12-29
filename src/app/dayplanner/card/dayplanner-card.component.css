@@ -14,3 +14,19 @@ mat-card-actions button {
 mat-card-actions button:hover {
   opacity: 1;
 }
+
+/* TODO: use scss instead to group these with `mat-card-actions button` */
+/* They seem to need a different opacity though. */
+mat-card-actions mat-form-field {
+  opacity: 0.5;
+  transition: all 0.1s ease-in-out;
+}
+
+mat-card-actions mat-form-field:hover {
+  opacity: 1;
+}
+
+.datepicker-input {
+  width: 120px;
+  margin: 0 5px;
+}

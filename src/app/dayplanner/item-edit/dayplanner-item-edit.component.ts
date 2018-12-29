@@ -57,7 +57,7 @@ export class DayplannerItemEditComponent implements OnInit {
   @Input() dayTimestamp: number | null = null;
   @Output() exit: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('itemInput') itemInputField: ElementRef;
-  itemFormControl = new FormControl('');
+  itemFormControl = new FormControl();
 
   constructor() { }
 

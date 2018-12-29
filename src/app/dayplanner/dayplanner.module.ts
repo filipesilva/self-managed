@@ -13,6 +13,8 @@ import {
   MAT_TOOLTIP_DEFAULT_OPTIONS
 } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { DayplannerRoutingModule } from './dayplanner-routing.module';
 import { DayplannerCardComponent } from './card/dayplanner-card.component';
@@ -41,6 +43,8 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
     MatListModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   declarations: [
     DayplannerCardComponent,

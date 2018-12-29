@@ -8,12 +8,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login.component';
-import { UserService } from './user/user.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,9 @@ import { UserService } from './user/user.service';
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

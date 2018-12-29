@@ -44,7 +44,21 @@
     >
       <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
     </button>
-    <button mat-button>{{dayTimestamp | date:"dd/MM/yyyy"}}</button>
+
+    <mat-form-field [floatLabel]="'never'" class="datepicker-input">
+      <input
+        matInput
+        [formControl]="dateFormControl"
+        [matDatepicker]="picker"
+      >
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+
     <button
       mat-icon-button
       matTooltip="Next day"
@@ -53,6 +67,7 @@
     >
       <mat-icon aria-label="Example icon-button with a heart icon">navigate_next</mat-icon>
     </button>
+
     <button
       mat-icon-button
       matTooltip="Add a new item [Enter]"
@@ -62,6 +77,7 @@
     >
       <mat-icon aria-label="Add a new item to the Dayplan">add</mat-icon>
     </button>
+
     <button
       mat-icon-button
       matTooltip="Information about Dayplanner"
@@ -69,5 +85,6 @@
     >
       <mat-icon aria-label="Help">help_outline</mat-icon>
     </button>
+
   </mat-card-actions>
 </mat-card>

@@ -1,8 +1,9 @@
 import { Component, HostListener, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable, timer } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-item';
 import { DayplannerItemComponent } from '../item/dayplanner-item.component';
@@ -25,6 +26,7 @@ export class DayplannerCardComponent {
   @ViewChild('emptyItem') emptyItem: DayplannerItemComponent;
   @ViewChildren(DayplannerItemComponent) itemComponents: QueryList<DayplannerItemComponent>;
   selectedItemId: string | null = null;
+  dateFormControl = new FormControl();
 
   constructor(
     private _userService: UserService,
@@ -36,8 +38,12 @@ export class DayplannerCardComponent {
 
   load() {
     this.dayTimestamp = this.dateStringToTimestamp(this._route.snapshot.paramMap.get('id'));
-    this.collection = this._userService.getDayplannerItemsCollectionForDay(this.dayTimestamp);
+    this.dateFormControl.setValue(new Date(this.dayTimestamp));
+    // TODO: this is still a subscription leak when navigating away by other means.
+    this.dateFormControl.valueChanges.pipe(first(v => !!v))
+      .subscribe(date => this._navigateToDay(date.toISOString().slice(0, 10)));
 
+    this.collection = this._userService.getDayplannerItemsCollectionForDay(this.dayTimestamp);
     this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => actions.map(a => new DayplannerItem(a, this.collection))),
       map(items => this.addNextTimestamp(items)),
@@ -91,7 +97,7 @@ export class DayplannerCardComponent {
   previousDay() {
     const previousDayTimestamp = this.dayTimestamp - 24 * 60 * 60 * 1000;
     const previousDayStr = (new Date(previousDayTimestamp)).toISOString().slice(0, 10);
-    this._router.navigate(['/dayplanner', previousDayStr]);
+    this._navigateToDay(previousDayStr);
   }
 
   @HostListener('document:keydown.arrowright', ['$event'])
@@ -99,7 +105,11 @@ export class DayplannerCardComponent {
   nextDay() {
     const nextDayTimestamp = this.dayTimestamp + 24 * 60 * 60 * 1000;
     const nextDayStr = (new Date(nextDayTimestamp)).toISOString().slice(0, 10);
-    this._router.navigate(['/dayplanner', nextDayStr]);
+    this._navigateToDay(nextDayStr);
+  }
+
+  private _navigateToDay(dayStr) {
+    this._router.navigate(['/dayplanner', dayStr]);
   }
 
   private selectItemDelta(delta: number) {
