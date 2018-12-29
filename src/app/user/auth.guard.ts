@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
   }
 
   checkLogin(url: string): Promise<boolean> {
-    return this._userService.user.pipe(first()).toPromise().then(user => {
+    return this._userService.getUser().then(user => {
       if (user != null) { return true; }
 
       // Store the attempted URL for redirecting.
