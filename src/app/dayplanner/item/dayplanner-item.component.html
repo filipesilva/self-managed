@@ -1,44 +1,44 @@
-<div *ngIf="editMode || forceEdit; then thenBlock else elseBlock"></div>
-<ng-template #thenBlock>
-  <sm-dayplanner-item-edit
-    [item]="item"
-    [collection]="collection"
-    [dayTimestamp]="dayTimestamp"
-    (exit)="closeEdit($event)"
+<sm-dayplanner-item-edit
+  [class.hidden]="!editMode && !forceEdit"
+  [item]="item"
+  [collection]="collection"
+  [dayTimestamp]="dayTimestamp"
+  (exit)="closeEdit($event)"
+>
+</sm-dayplanner-item-edit>
+<mat-list-item
+  [class.hidden]="editMode || forceEdit"
+  [ngClass]="{ 'selected': selected }"
+  *ngIf="item; else empty"
+>
+  <div
+    class="content"
+    [ngClass]="this.state | async"
+    (click)="showEditForm()"
   >
-  </sm-dayplanner-item-edit>
-</ng-template>
-<ng-template #elseBlock>
-  <mat-list-item
-    [ngClass]="{ 'selected': selected }"
-    *ngIf="item; else empty"
-  >
-    <div
-      class="content"
-      [ngClass]="this.state | async"
-      (click)="showEditForm()"
+    {{item.toString()}}
+  </div>
+  <div class="actions">
+    <button
+      mat-icon-button
+      matTooltip="Reschedule this item"
+      aria-label="Reschedule this item"
     >
-      {{item.toString()}}
-    </div>
-    <div class="actions">
-      <button
-        mat-icon-button
-        matTooltip="Reschedule this item"
-        aria-label="Reschedule this item"
-      >
-        <mat-icon aria-label="Reschedule">query_builder</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        matTooltip="Delete this item"
-        aria-label="Delete this item"
-        (click)="delete()"
-      >
-        <mat-icon aria-label="Delete">delete</mat-icon>
-      </button>
-    </div>
-  </mat-list-item>
-  <ng-template #empty>
-    <mat-list-item></mat-list-item>
-  </ng-template>
+      <mat-icon aria-label="Reschedule">query_builder</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      matTooltip="Delete this item"
+      aria-label="Delete this item"
+      (click)="delete()"
+    >
+      <mat-icon aria-label="Delete">delete</mat-icon>
+    </button>
+  </div>
+</mat-list-item>
+<ng-template #empty>
+  <mat-list-item
+    [class.hidden]="editMode || forceEdit"
+    (click)="showEditForm()"
+  ></mat-list-item>
 </ng-template>

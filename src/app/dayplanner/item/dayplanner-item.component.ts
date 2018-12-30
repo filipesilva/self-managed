@@ -1,8 +1,10 @@
-import { Component, Input, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DayplannerItem, DayplannerItemComponentState, RawDayplannerItem } from '../dayplanner-item';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
+
+import { DayplannerItem, DayplannerItemComponentState, RawDayplannerItem } from '../dayplanner-item';
+import { DayplannerItemEditComponent } from '../item-edit/dayplanner-item-edit.component';
 
 
 @Component({
@@ -17,6 +19,7 @@ export class DayplannerItemComponent implements OnInit {
   @Input() forceEdit = false;
   @Input() dayTimestamp: number;
   @Input() collection?: AngularFirestoreCollection<RawDayplannerItem>;
+  @ViewChild(DayplannerItemEditComponent) editItem: DayplannerItemEditComponent;
   state: Observable<DayplannerItemComponentState> = of(DayplannerItemComponentState.Upcoming);
   editMode = false;
 
@@ -42,5 +45,6 @@ export class DayplannerItemComponent implements OnInit {
 
   showEditForm() {
     this.editMode = true;
+    this.editItem.focus();
   }
 }

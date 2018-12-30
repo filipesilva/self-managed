@@ -65,7 +65,6 @@ export class DayplannerItemEditComponent implements OnInit {
     if (this.item) {
       this.itemFormControl.setValue(this.item.toString());
     }
-    this.itemInputField.nativeElement.focus();
   }
 
   onSubmit() {
@@ -82,10 +81,18 @@ export class DayplannerItemEditComponent implements OnInit {
     }
   }
 
+  focus() {
+    // setTimeout is needed because the edit form starts with `display:none`,
+    // we can't focus an element that isn't displayed. So we do it async.
+    // TODO: find a better way to do this.
+    setTimeout(() => this.itemInputField.nativeElement.focus(), 0);
+  }
+
   @HostListener('document:keydown.escape', ['$event'])
   @Keybind({ preventInput: false })
   emitExit(submitted = false) {
     this.itemFormControl.reset();
     this.exit.emit(submitted);
+    setTimeout(() => this.itemInputField.nativeElement.blur(), 0);
   }
 }

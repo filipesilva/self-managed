@@ -1,7 +1,7 @@
-import { Component, HostListener, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, HostListener, ViewChild, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
-import { Observable, timer } from 'rxjs';
-import { map, tap, first } from 'rxjs/operators';
+import { Observable, timer, Subject } from 'rxjs';
+import { map, tap, first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
@@ -16,7 +16,7 @@ import { UserService } from '../../user/user.service';
   templateUrl: './dayplanner-card.component.html',
   styleUrls: ['./dayplanner-card.component.css'],
 })
-export class DayplannerCardComponent {
+export class DayplannerCardComponent implements OnDestroy {
   dayTimestamp: number;
   // TODO: make a single ticker for the whole app.
   ticker = timer(0, 5 * 60 * 1000).pipe(map(() => Date.now()));
@@ -27,6 +27,8 @@ export class DayplannerCardComponent {
   @ViewChildren(DayplannerItemComponent) itemComponents: QueryList<DayplannerItemComponent>;
   selectedItemId: string | null = null;
   dateFormControl = new FormControl();
+  private _onDestroy = new Subject();
+  private _firstLoad = true;
 
   constructor(
     private _userService: UserService,
@@ -40,15 +42,35 @@ export class DayplannerCardComponent {
     this.dayTimestamp = this.dateStringToTimestamp(this._route.snapshot.paramMap.get('id'));
     this.dateFormControl.setValue(new Date(this.dayTimestamp));
     // TODO: this is still a subscription leak when navigating away by other means.
-    this.dateFormControl.valueChanges.pipe(first(v => !!v))
-      .subscribe(date => this._navigateToDay(date.toISOString().slice(0, 10)));
+    this.dateFormControl.valueChanges.pipe(
+      takeUntil(this._onDestroy),
+      first(v => !!v),
+      tap(date => this._navigateToDay(date.toISOString().slice(0, 10))),
+    ).subscribe();
 
     this.collection = this._userService.getDayplannerItemsCollectionForDay(this.dayTimestamp);
     this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => actions.map(a => new DayplannerItem(a, this.collection))),
       map(items => this.addNextTimestamp(items)),
       tap(items => this.itemsSnapshot = items),
+      tap(items => {
+        // Show the edit form whenever there are no items on the first load.
+        if (this._firstLoad) {
+          // Run it async to give the view a change to update.
+          // TODO: find a better way to do this.
+          setTimeout(() => {
+            if (items.length === 0 && this.emptyItem) {
+              this.emptyItem.showEditForm();
+            }
+          }, 0);
+          this._firstLoad = false;
+        }
+      })
     );
+  }
+
+  ngOnDestroy() {
+    this._onDestroy.next();
   }
 
   delectIfSelected(item: DayplannerItem) {
