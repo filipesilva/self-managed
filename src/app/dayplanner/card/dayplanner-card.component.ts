@@ -93,9 +93,12 @@ export class DayplannerCardComponent implements OnDestroy {
   }
 
   @HostListener('document:keydown.escape', ['$event'])
-  @Keybind()
-  deselectItem() {
+  @Keybind({ preventInput: false })
+  deselect() {
     this.selectedItemId = null;
+    if ((document.activeElement as any).blur) {
+      (document.activeElement as any).blur();
+    }
   }
 
   @HostListener('document:keydown.arrowdown', ['$event'])
