@@ -21,7 +21,7 @@ export function Keybind(opts?: KeybindOptions) {
         // Ignore events from the material datepicker.
         if (opts.preventInput && isEventFromDatepicker(event)) { return; }
         // Prevent event propagation.
-        if (opts.preventInput) { event.stopPropagation(); }
+        if (opts.stopPropagation) { event.stopPropagation(); }
         // Also prevent default behaviour.
         if (opts.preventDefault) { event.preventDefault(); }
       }

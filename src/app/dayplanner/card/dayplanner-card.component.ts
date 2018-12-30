@@ -154,9 +154,10 @@ export class DayplannerCardComponent implements OnDestroy {
     this.datepicker.open();
   }
 
-  // TODO: figure out the right HostListener string for '?'
+  // TODO: figure out the right HostListener string for '?' instead of catching all and detecting
+  // the key.
   @HostListener('document:keydown', ['$event'])
-  @Keybind()
+  @Keybind({ stopPropagation: false, preventDefault: false })
   openHelp(event?: KeyboardEvent) {
     if (!event || event.key === '?') {
       this.dialog.open(DayplannerHelpComponent);
