@@ -21,7 +21,6 @@ export class DayplannerItem {
   // 10 something
   private static itemStringRegex =
     /^(?:(?<hours>\d\d)(?:\:(?<minutes>\d\d))? (?:- )?)?(?<content>.+)/s;
-  private nextTimestamp: number | null = null;
   private _id: string;
   private _raw: RawDayplannerItem;
   private _date: Date;
@@ -71,26 +70,6 @@ export class DayplannerItem {
 
   get unscheduled() {
     return !!this._raw.unscheduled;
-  }
-
-  setNextTimestamp(nextTimestamp: number) {
-    this.nextTimestamp = nextTimestamp;
-  }
-
-  getStateForTimestamp(timestamp: number): DayplannerItemComponentState {
-    if (this._raw.unscheduled) {
-      return DayplannerItemComponentState.Unscheduled;
-    }
-
-    if (this.nextTimestamp !== null && timestamp > this.nextTimestamp) {
-      return DayplannerItemComponentState.Past;
-    }
-
-    if (timestamp > this._raw.timestamp) {
-      return DayplannerItemComponentState.Current;
-    }
-
-    return DayplannerItemComponentState.Upcoming;
   }
 
   delete() {

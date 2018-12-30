@@ -7,9 +7,10 @@
 
     <mat-list *ngIf="items$ | async as items; else loading">
       <sm-dayplanner-item
-        *ngFor="let item of items"
+        *ngFor="let item of items; index as idx"
         [dayTimestamp]="dayTimestamp"
         [item]="item"
+        [nextItem]="items[idx+1]"
         [ticker]="ticker"
         [selected]="item.id === selectedItemId"
         (mouseenter)="selectItem(item)"

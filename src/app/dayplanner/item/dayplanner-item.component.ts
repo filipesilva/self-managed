@@ -14,6 +14,7 @@ import { DayplannerItemEditComponent } from '../item-edit/dayplanner-item-edit.c
 })
 export class DayplannerItemComponent implements OnInit {
   @Input() item?: DayplannerItem;
+  @Input() nextItem?: DayplannerItem;
   @Input() ticker?: Observable<number>;
   @Input() selected = false;
   @Input() forceEdit = false;
@@ -27,7 +28,7 @@ export class DayplannerItemComponent implements OnInit {
 
   ngOnInit() {
     if (this.ticker) {
-      this.state = this.ticker.pipe(map(time => this.item.getStateForTimestamp(time)));
+      this.state = this.ticker.pipe(map(time => this.getStateForTimestamp(time)));
     }
   }
 
@@ -46,5 +47,26 @@ export class DayplannerItemComponent implements OnInit {
   showEditForm() {
     this.editMode = true;
     this.editItem.focus();
+  }
+
+  private getStateForTimestamp(timestamp: number): DayplannerItemComponentState {
+    const curr = this.item;
+    const next = this.nextItem;
+
+    if (curr) {
+      if (curr.unscheduled) {
+        return DayplannerItemComponentState.Unscheduled;
+      }
+
+      if (next && next.timestamp !== null && timestamp > next.timestamp) {
+        return DayplannerItemComponentState.Past;
+      }
+
+      if (timestamp > curr.timestamp) {
+        return DayplannerItemComponentState.Current;
+      }
+    }
+
+    return DayplannerItemComponentState.Upcoming;
   }
 }

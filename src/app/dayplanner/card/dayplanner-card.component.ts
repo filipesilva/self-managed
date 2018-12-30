@@ -54,7 +54,6 @@ export class DayplannerCardComponent implements OnDestroy {
     this.collection = this._userService.getDayplannerItemsCollectionForDay(this.dayTimestamp);
     this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => actions.map(a => new DayplannerItem(a, this.collection))),
-      map(items => this.addNextTimestamp(items)),
       tap(items => this.itemsSnapshot = items),
       tap(items => {
         // Show the edit form whenever there are no items on the first load.
@@ -169,16 +168,6 @@ export class DayplannerCardComponent implements OnDestroy {
 
   private positiveModulo(i: number, n: number) {
     return (i % n + n) % n;
-  }
-
-  private addNextTimestamp(items: DayplannerItem[]): DayplannerItem[] {
-    return items.map((item, idx) => {
-      if (!item.unscheduled && idx !== items.length - 1) {
-        item.setNextTimestamp(items[idx + 1].timestamp);
-      }
-
-      return item;
-    });
   }
 
   private dateStringToTimestamp(dateStr: string): number {
