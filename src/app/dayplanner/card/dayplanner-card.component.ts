@@ -4,12 +4,14 @@ import { Observable, timer, Subject } from 'rxjs';
 import { map, tap, first, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 import { RawDayplannerItem, DayplannerItem } from '../dayplanner-item';
 import { DayplannerItemComponent } from '../item/dayplanner-item.component';
 import { Keybind } from '../keybind.decorator';
 import { UserService } from '../../user/user.service';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { DayplannerHelpComponent } from '../help/dayplanner-help.component';
 
 
 @Component({
@@ -37,6 +39,7 @@ export class DayplannerCardComponent implements OnDestroy {
     private _userService: UserService,
     private _route: ActivatedRoute,
     private _router: Router,
+    private dialog: MatDialog,
   ) {
     this._route.params.subscribe(() => this.load());
   }
@@ -149,6 +152,15 @@ export class DayplannerCardComponent implements OnDestroy {
   @Keybind()
   openDatepicker() {
     this.datepicker.open();
+  }
+
+  // TODO: figure out the right HostListener string for '?'
+  @HostListener('document:keydown', ['$event'])
+  @Keybind()
+  openHelp(event?: KeyboardEvent) {
+    if (!event || event.key === '?') {
+      this.dialog.open(DayplannerHelpComponent);
+    }
   }
 
   private _navigateToDay(dayStr) {

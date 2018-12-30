@@ -15,11 +15,13 @@ import {
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { DayplannerRoutingModule } from './dayplanner-routing.module';
 import { DayplannerCardComponent } from './card/dayplanner-card.component';
 import { DayplannerItemComponent } from './item/dayplanner-item.component';
 import { DayplannerItemEditComponent } from './item-edit/dayplanner-item-edit.component';
+import { DayplannerHelpComponent } from './help/dayplanner-help.component';
 
 
 /** Custom options the configure the tooltip's default show/hide delays. */
@@ -45,11 +47,16 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
     MatProgressSpinnerModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatDialogModule
   ],
   declarations: [
     DayplannerCardComponent,
     DayplannerItemComponent,
     DayplannerItemEditComponent,
+    DayplannerHelpComponent,
+  ],
+  entryComponents: [
+    DayplannerHelpComponent
   ],
   providers: [
     { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults }
