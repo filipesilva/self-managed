@@ -57,7 +57,7 @@ export class DayplannerItemEditComponent implements OnInit {
   @Input() dayTimestamp: number | null = null;
   @Output() exit: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('itemInput') itemInputField: ElementRef;
-  itemFormControl = new FormControl();
+  itemFormControl = new FormControl('');
 
   constructor() { }
 
@@ -89,7 +89,7 @@ export class DayplannerItemEditComponent implements OnInit {
   }
 
   emitExit(submitted = false) {
-    this.itemFormControl.reset(this.item ? this.item.toString() : null);
+    this.itemFormControl.reset(this.item ? this.item.toString() : '');
     this.exit.emit(submitted);
     setTimeout(() => this.itemInputField.nativeElement.blur(), 0);
   }
