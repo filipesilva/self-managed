@@ -18,6 +18,8 @@ export function Keybind(opts?: KeybindOptions) {
         const event: KeyboardEvent = arguments[0];
         // Ignore events from inputs.
         if (opts.preventInput && isEventFromInput(event)) { return; }
+        // Ignore events from the material datepicker.
+        if (opts.preventInput && isEventFromDatepicker(event)) { return; }
         // Prevent event propagation.
         if (opts.preventInput) { event.stopPropagation(); }
         // Also prevent default behaviour.
@@ -30,7 +32,7 @@ export function Keybind(opts?: KeybindOptions) {
 }
 
 // From https://www.bennadel.com/blog/3382-handling-global-keyboard-shortcuts-using-priority-and-terminality-in-angular-5-0-5.htm
-export function isEventFromInput(event: KeyboardEvent): boolean {
+function isEventFromInput(event: KeyboardEvent): boolean {
   if (event.target instanceof Node) {
     switch (event.target.nodeName) {
       case 'INPUT':
@@ -40,6 +42,14 @@ export function isEventFromInput(event: KeyboardEvent): boolean {
       default:
         return false;
     }
+  }
+
+  return false;
+}
+
+function isEventFromDatepicker(event: KeyboardEvent): boolean {
+  if (event.target instanceof HTMLTableCellElement) {
+    return event.target.classList.contains('mat-calendar-body-cell');
   }
 
   return false;
