@@ -85,6 +85,10 @@ export class DayplannerItem {
     return `${timeStr}${this.content}`;
   }
 
+  trackBy() {
+    return this.id + this._raw.content;
+  }
+
   private getTimeStr() {
     const hours = this._date.getUTCHours().toString().padStart(2, '0');
     const minutes = this._date.getUTCMinutes().toString().padStart(2, '0');

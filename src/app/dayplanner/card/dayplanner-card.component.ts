@@ -75,6 +75,10 @@ export class DayplannerCardComponent implements OnDestroy {
     this._onDestroy.next();
   }
 
+  trackByItems(_index: number, item: DayplannerItem) {
+    return item.trackBy();
+  }
+
   delectIfSelected(item: DayplannerItem) {
     if (item.id === this.selectedItemId) { this.selectedItemId = null; }
   }

@@ -29,3 +29,16 @@
 .hidden {
   display: none;
 }
+
+mat-list-item {
+  animation: fadein 0.2s ease-in-out;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

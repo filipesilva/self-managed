@@ -7,7 +7,7 @@
 
     <mat-list *ngIf="items$ | async as items; else loading">
       <sm-dayplanner-item
-        *ngFor="let item of items; index as idx"
+        *ngFor="let item of items; index as idx; trackBy: trackByItems"
         [dayTimestamp]="dayTimestamp"
         [item]="item"
         [nextItem]="items[idx+1]"
