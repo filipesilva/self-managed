@@ -91,7 +91,7 @@ export class DayplannerItemEditComponent implements OnInit {
   @HostListener('document:keydown.escape', ['$event'])
   @Keybind({ preventInput: false })
   emitExit(submitted = false) {
-    this.itemFormControl.reset();
+    this.itemFormControl.reset(this.item ? this.item.toString() : null);
     this.exit.emit(submitted);
     setTimeout(() => this.itemInputField.nativeElement.blur(), 0);
   }
