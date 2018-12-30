@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild, ViewChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, HostListener, ViewChild, ViewChildren, QueryList, OnDestroy, ElementRef } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable, timer, Subject } from 'rxjs';
 import { map, tap, first, takeUntil } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { RawDayplannerItem, DayplannerItem } from '../dayplanner-item';
 import { DayplannerItemComponent } from '../item/dayplanner-item.component';
 import { Keybind } from '../keybind.decorator';
 import { UserService } from '../../user/user.service';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 
 @Component({
@@ -24,6 +25,8 @@ export class DayplannerCardComponent implements OnDestroy {
   itemsSnapshot: DayplannerItem[];
   collection: AngularFirestoreCollection<RawDayplannerItem>;
   @ViewChild('emptyItem') emptyItem: DayplannerItemComponent;
+  @ViewChild('dateInput') dateInput: ElementRef;
+  @ViewChild('datepicker') datepicker: MatDatepicker<any>;
   @ViewChildren(DayplannerItemComponent) itemComponents: QueryList<DayplannerItemComponent>;
   selectedItemId: string | null = null;
   dateFormControl = new FormControl();
@@ -128,6 +131,18 @@ export class DayplannerCardComponent implements OnDestroy {
     const nextDayTimestamp = this.dayTimestamp + 24 * 60 * 60 * 1000;
     const nextDayStr = (new Date(nextDayTimestamp)).toISOString().slice(0, 10);
     this._navigateToDay(nextDayStr);
+  }
+
+  @HostListener('document:keydown.d', ['$event'])
+  @Keybind()
+  clickDateInput() {
+    this.dateInput.nativeElement.click();
+  }
+
+  @HostListener('document:keydown.p', ['$event'])
+  @Keybind()
+  openDatepicker() {
+    this.datepicker.open();
   }
 
   private _navigateToDay(dayStr) {

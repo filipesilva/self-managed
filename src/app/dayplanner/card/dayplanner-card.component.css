@@ -11,18 +11,18 @@ mat-card-actions button {
   transition: all 0.1s ease-in-out;
 }
 
-mat-card-actions button:hover {
-  opacity: 1;
-}
-
 /* TODO: use scss instead to group these with `mat-card-actions button` */
 /* They seem to need a different opacity though. */
+
 mat-card-actions mat-form-field {
   opacity: 0.5;
   transition: all 0.1s ease-in-out;
 }
 
-mat-card-actions mat-form-field:hover {
+mat-card-actions button:hover,
+mat-card-actions button:focus,
+mat-card-actions mat-form-field:hover,
+mat-card-actions mat-form-field:focus-within {
   opacity: 1;
 }
 
