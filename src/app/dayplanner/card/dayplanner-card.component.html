@@ -26,9 +26,11 @@
 
     <ng-template #loading>
       <div style="display: flex;">
+        <!-- NB: spinner diameter is same size as above mat-list with empty item. -->
+        <!-- This is done so that there is no resize after load on days with no items. -->
         <mat-spinner
           style="margin: auto;"
-          diameter="50"
+          diameter="56"
         ></mat-spinner>
       </div>
     </ng-template>
