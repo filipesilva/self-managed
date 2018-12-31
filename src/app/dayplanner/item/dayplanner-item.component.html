@@ -14,7 +14,7 @@
   <div
     class="content"
     [ngClass]="this.state | async"
-    (click)="showEditForm()"
+    (tap)="selected && showEditForm($event)"
   >
     {{item.toString()}}
   </div>
