@@ -1,12 +1,13 @@
 .unscheduled {
-  opacity: 0.7;
+  color: lightgray;
 }
 
 .past {
-  opacity: 0.5;
+  color: gray;
 }
 
 .current {
+  color: black;
   font-size: larger;
   font-weight: bolder;
 }

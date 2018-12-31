@@ -15,8 +15,8 @@
     width: 400px;
   }
   .dayplanner-list {
-    border-left: 1px solid black;
-    border-right: 1px solid black;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
     padding-top: 0;
     padding-bottom: 0;
   }
