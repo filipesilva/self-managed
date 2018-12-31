@@ -9,8 +9,15 @@
 .edit-container {
   display: flex;
   align-items: center;
-  flex-grow: 1;
   height: 40px;
+}
+
+.itemString {
+  min-height: 19px;
+}
+
+.content {
+  flex-grow: 1;
 }
 
 .unscheduled {
@@ -25,10 +32,6 @@
   color: black;
   font-size: larger;
   font-weight: bolder;
-}
-
-.content {
-  flex-grow: 1;
 }
 
 .actions {

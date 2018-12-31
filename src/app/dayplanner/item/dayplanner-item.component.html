@@ -2,25 +2,25 @@
   class="item-container"
   [class.selected]="selected"
   [ngClass]="this.state | async"
-  (tap)="(selected || !item) && showEditForm($event)"
 >
   <div
     class="content"
-    [class.hidden]="(editMode || forceEdit)"
-    *ngIf="item"
+    (tap)="(selected || !item) && showEditForm()"
   >
-    {{item.toString()}}
-  </div>
+    <div class="itemString" [class.hidden]="(editMode || forceEdit)">
+      {{item ? item.toString() : ''}}
+    </div>
 
-  <sm-dayplanner-item-edit
-    class="edit-container"
-    [class.hidden]="!(editMode || forceEdit)"
-    [item]="item"
-    [collection]="collection"
-    [dayTimestamp]="dayTimestamp"
-    (exit)="closeEdit($event)"
-  >
-  </sm-dayplanner-item-edit>
+    <sm-dayplanner-item-edit
+      class="edit-container"
+      [class.hidden]="!(editMode || forceEdit)"
+      [item]="item"
+      [collection]="collection"
+      [dayTimestamp]="dayTimestamp"
+      (exit)="closeEdit($event)"
+    >
+    </sm-dayplanner-item-edit>
+  </div>
 
   <div class="actions">
     <button
