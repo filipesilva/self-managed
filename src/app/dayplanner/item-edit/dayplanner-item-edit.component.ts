@@ -12,36 +12,39 @@ import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { FormControl } from '@angular/forms';
 
 import { DayplannerItem, RawDayplannerItem } from '../dayplanner-item';
+import { Keybind } from '../keybind.decorator';
 
 
 @Component({
   selector: 'sm-dayplanner-item-edit',
   template: `
-    <form class="dayplanner-form" (ngSubmit)="onSubmit()">
+    <form class="dayplanner-item-form">
       <mat-form-field
-        class="dayplanner-full-width"
+        class="full-width"
         [floatLabel]="'never'"
       >
-        <input
+        <textarea
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="1"
           #itemInput
           matInput
           [formControl]="itemFormControl"
-          type="text"
           placeholder="I intend to..."
           (blur)="emitExit()"
         >
+        </textarea>
         <mat-error>You must enter something</mat-error>
       </mat-form-field>
     </form>
   `,
   styles: [`
-    .dayplanner-form {
+    .dayplanner-item-form {
       min-width: 150px;
       max-width: 500px;
       width: 100%;
     }
 
-    .dayplanner-full-width {
+    .full-width {
       width: 100%;
     }
   `]
@@ -64,6 +67,8 @@ export class DayplannerItemEditComponent implements OnInit {
     }
   }
 
+  @HostListener('document:keydown.enter', ['$event'])
+  @Keybind({ preventInput: false })
   onSubmit() {
     if (this.itemFormControl.value !== '') {
       const rawItem = DayplannerItem.parseItemString(this.itemFormControl.value, this.dayTimestamp);

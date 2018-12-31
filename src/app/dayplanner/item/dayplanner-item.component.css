@@ -2,9 +2,6 @@
   min-height: 40px;
   padding: 5px 0;
   font-size: 16px;
-}
-
-.content-container {
   display: flex;
   align-items: center;
 }
@@ -12,6 +9,7 @@
 .edit-container {
   display: flex;
   align-items: center;
+  flex-grow: 1;
   height: 40px;
 }
 

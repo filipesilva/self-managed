@@ -1,10 +1,19 @@
 <div
   class="item-container"
-  [ngClass]="{ 'selected': selected }"
+  [class.selected]="selected"
+  [ngClass]="this.state | async"
   (tap)="(selected || !item) && showEditForm($event)"
 >
+  <div
+    class="content"
+    [class.hidden]="(editMode || forceEdit)"
+    *ngIf="item"
+  >
+    {{item.toString()}}
+  </div>
+
   <sm-dayplanner-item-edit
-  class="edit-container"
+    class="edit-container"
     [class.hidden]="!(editMode || forceEdit)"
     [item]="item"
     [collection]="collection"
@@ -13,33 +22,21 @@
   >
   </sm-dayplanner-item-edit>
 
-  <div
-    class="content-container"
-    [class.hidden]="(editMode || forceEdit)"
-    *ngIf="item"
-  >
-    <div
-      class="content"
-      [ngClass]="this.state | async"
+  <div class="actions">
+    <button
+      mat-icon-button
+      matTooltip="Reschedule this item"
+      aria-label="Reschedule this item"
     >
-      {{item.toString()}}
-    </div>
-    <div class="actions">
-      <button
-        mat-icon-button
-        matTooltip="Reschedule this item"
-        aria-label="Reschedule this item"
-      >
-        <mat-icon aria-label="Reschedule">query_builder</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        matTooltip="Delete this item [delete]"
-        aria-label="Delete this item"
-        (click)="delete()"
-      >
-        <mat-icon aria-label="Delete">delete</mat-icon>
-      </button>
-    </div>
+      <mat-icon aria-label="Reschedule">query_builder</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      matTooltip="Delete this item [delete]"
+      aria-label="Delete this item"
+      (click)="delete()"
+    >
+      <mat-icon aria-label="Delete">delete</mat-icon>
+    </button>
   </div>
 </div>
