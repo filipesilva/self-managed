@@ -11,7 +11,7 @@
         [dayTimestamp]="dayTimestamp"
         [item]="item"
         [nextItem]="items[idx+1]"
-        [ticker]="ticker"
+        [ticker]="tickerService.ticker"
         [selected]="item.id === selectedItemId"
         (mouseenter)="selectItem(item)"
         (mouseleave)="delectIfSelected(item)"

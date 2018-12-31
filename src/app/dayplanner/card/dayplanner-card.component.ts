@@ -12,6 +12,7 @@ import { Keybind } from '../keybind.decorator';
 import { UserService } from '../../user/user.service';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { DayplannerHelpComponent } from '../help/dayplanner-help.component';
+import { TickerService } from '../ticker/ticker.service';
 
 
 @Component({
@@ -21,8 +22,6 @@ import { DayplannerHelpComponent } from '../help/dayplanner-help.component';
 })
 export class DayplannerCardComponent implements OnDestroy {
   dayTimestamp: number;
-  // TODO: make a single ticker for the whole app.
-  ticker = timer(0, 5 * 60 * 1000).pipe(map(() => Date.now()));
   items$: Observable<DayplannerItem[]>;
   itemsSnapshot: DayplannerItem[];
   collection: AngularFirestoreCollection<RawDayplannerItem>;
@@ -40,6 +39,7 @@ export class DayplannerCardComponent implements OnDestroy {
     private _route: ActivatedRoute,
     private _router: Router,
     private dialog: MatDialog,
+    public tickerService: TickerService,
   ) {
     this._route.params.subscribe(() => this.load());
   }
@@ -58,6 +58,8 @@ export class DayplannerCardComponent implements OnDestroy {
     this.items$ = this.collection.snapshotChanges().pipe(
       map(actions => actions.map(a => new DayplannerItem(a, this.collection))),
       tap(items => this.itemsSnapshot = items),
+      // Get an up-to-date tick.
+      tap(() => this.tickerService.tick()),
       tap(items => {
         // Show the edit form whenever there are no items on the first load.
         if (this._firstLoad) {
