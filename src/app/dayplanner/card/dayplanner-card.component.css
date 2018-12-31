@@ -44,7 +44,6 @@ mat-card-actions mat-form-field {
 }
 
 mat-card-actions button:hover,
-mat-card-actions button:focus,
 mat-card-actions mat-form-field:hover,
 mat-card-actions mat-form-field:focus-within {
   opacity: 1;
