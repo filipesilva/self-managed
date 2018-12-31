@@ -1,5 +1,14 @@
 .dayplanner-card {
-  width: 400px;
+  margin-top: 20px;
+}
+
+@media (min-width:320px) {
+  /* mobile styles go here */
+}
+@media (min-width:1025px) {
+  .dayplanner-card {
+    width: 400px;
+  }
 }
 
 .hidden {
