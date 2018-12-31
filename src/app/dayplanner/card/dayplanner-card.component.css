@@ -1,13 +1,28 @@
-.dayplanner-card {
-  margin-top: 20px;
+.dayplanner-list {
+  box-shadow: inherit;
+}
+
+.dayplanner-list mat-card-content {
+  margin-bottom: 0;
 }
 
 @media (min-width:320px) {
   /* mobile styles go here */
 }
 @media (min-width:1025px) {
-  .dayplanner-card {
+  .dayplanner-list {
+    margin-top: 20px;
     width: 400px;
+  }
+  .dayplanner-list {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .dayplanner-list mat-card-title {
+    /* This padding matches a padding bottom on the datepicker. */
+    padding-top: 20px;
   }
 }
 

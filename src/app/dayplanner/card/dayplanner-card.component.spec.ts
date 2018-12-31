@@ -8,7 +8,7 @@ describe('DayplannerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DayplannerCardComponent ]
+      declarations: [DayplannerCardComponent ]
     })
     .compileComponents();
   }));
