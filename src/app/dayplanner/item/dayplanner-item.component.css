@@ -1,3 +1,20 @@
+.item-container {
+  min-height: 40px;
+  padding: 5px 0;
+  font-size: 16px;
+}
+
+.content-container {
+  display: flex;
+  align-items: center;
+}
+
+.edit-container {
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+
 .unscheduled {
   color: lightgray;
 }
