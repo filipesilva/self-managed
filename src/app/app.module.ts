@@ -28,7 +28,7 @@ import { LoginComponent } from './login.component';
     MatCardModule,
     MatProgressSpinnerModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule.enablePersistence({ experimentalTabSynchronization: true }),
     AngularFireAuthModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
