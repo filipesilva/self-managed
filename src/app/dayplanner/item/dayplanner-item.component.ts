@@ -53,20 +53,34 @@ export class DayplannerItemComponent implements OnInit {
     const curr = this.item;
     const next = this.nextItem;
 
-    if (curr) {
-      if (curr.unscheduled) {
-        return DayplannerItemComponentState.Unscheduled;
-      }
-
-      if (next && next.timestamp !== null && timestamp > next.timestamp) {
-        return DayplannerItemComponentState.Past;
-      }
-
-      if (timestamp > curr.timestamp) {
-        return DayplannerItemComponentState.Current;
-      }
+    if (!curr) {
+      return DayplannerItemComponentState.Upcoming;
     }
 
-    return DayplannerItemComponentState.Upcoming;
+    if (curr.unscheduled) {
+      return DayplannerItemComponentState.Unscheduled;
+    }
+
+    // The timestamp is in future day, so this item is in the past.
+    if (timestamp > this.dayTimestamp + 24 * 60 * 60 * 1000) {
+      return DayplannerItemComponentState.Past;
+    }
+
+    // The timestamp is before this item.
+    if (timestamp < curr.timestamp) {
+      return DayplannerItemComponentState.Upcoming;
+    }
+
+    // The timestamp is between this item and the next, so this item is the current one.
+    if (next
+      && timestamp >= curr.timestamp
+      && next.timestamp !== null
+      && timestamp < next.timestamp
+    ) {
+      return DayplannerItemComponentState.Current;
+    }
+
+    // Otherwise, the item is in the past.
+    return DayplannerItemComponentState.Past;
   }
 }
