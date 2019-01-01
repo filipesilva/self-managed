@@ -9,6 +9,7 @@
 @media (min-width:320px) {
   /* mobile styles go here */
 }
+
 @media (min-width:1025px) {
   .dayplanner-list {
     margin-top: 20px;
@@ -30,26 +31,46 @@
   visibility: hidden;
 }
 
-mat-card-actions button {
+.title-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.title {
+  flex-grow: 1;
+  font-weight: 500;
+  font-size: 22px;
+  font-style: italic;
+  padding-bottom: 4px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.actions button {
   opacity: 0.3;
   transition: all 0.1s ease-in-out;
 }
 
+
 /* TODO: use scss instead to group these with `mat-card-actions button` */
+
 /* They seem to need a different opacity though. */
 
-mat-card-actions mat-form-field {
+.actions mat-form-field {
   opacity: 0.5;
   transition: all 0.1s ease-in-out;
 }
 
-mat-card-actions button:hover,
-mat-card-actions mat-form-field:hover,
-mat-card-actions mat-form-field:focus-within {
+.actions button:hover, .actions mat-form-field:hover, .actions mat-form-field:focus-within {
   opacity: 1;
 }
 
 .datepicker-input {
-  width: 120px;
+  width: 100px;
   margin: 0 5px;
+  font-size: 14px;
 }

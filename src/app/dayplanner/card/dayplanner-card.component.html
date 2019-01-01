@@ -1,7 +1,67 @@
 <mat-card class="dayplanner-list">
-  <mat-card-title>
-    <i>Dayplanner</i>
-  </mat-card-title>
+  <div class="title-bar">
+    <div class="title">
+      Dayplanner
+    </div>
+
+    <div class="actions">
+      <button
+        mat-icon-button
+        matTooltip="Previous day [arrowleft]"
+        aria-label="Switches to the previous day"
+        (click)="previousDay()"
+      >
+        <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
+      </button>
+
+      <mat-form-field
+        [floatLabel]="'never'"
+        class="datepicker-input"
+      >
+        <input
+          matInput
+          #dateInput
+          [formControl]="dateFormControl"
+          [matDatepicker]="datepicker"
+        >
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="datepicker"
+          matTooltip="Open date picker [p]"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #datepicker></mat-datepicker>
+      </mat-form-field>
+
+      <button
+        mat-icon-button
+        matTooltip="Next day [arrowright]"
+        aria-label="Switches to the next day"
+        (click)="nextDay()"
+      >
+        <mat-icon aria-label="Example icon-button with a heart icon">navigate_next</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        matTooltip="Add a new item [Enter]"
+        aria-label="Shows a form to add new items"
+        (click)="editOrNew()"
+        class="faded"
+      >
+        <mat-icon aria-label="Add a new item to the Dayplan">add</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        matTooltip="Information about Dayplanner [?]"
+        aria-label="Shows information about Dayplanner"
+        (click)="openHelp()"
+      >
+        <mat-icon aria-label="Help">help_outline</mat-icon>
+      </button>
+
+    </div>
+  </div>
 
   <mat-card-content>
 
@@ -37,60 +97,4 @@
     </ng-template>
 
   </mat-card-content>
-
-  <mat-card-actions>
-    <button
-      mat-icon-button
-      matTooltip="Previous day [arrowleft]"
-      aria-label="Switches to the previous day"
-      (click)="previousDay()"
-    >
-      <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
-    </button>
-
-    <mat-form-field [floatLabel]="'never'" class="datepicker-input">
-      <input
-        matInput
-        #dateInput
-        [formControl]="dateFormControl"
-        [matDatepicker]="datepicker"
-      >
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="datepicker"
-        matTooltip="Open date picker [p]"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #datepicker></mat-datepicker>
-    </mat-form-field>
-
-
-    <button
-      mat-icon-button
-      matTooltip="Next day [arrowright]"
-      aria-label="Switches to the next day"
-      (click)="nextDay()"
-    >
-      <mat-icon aria-label="Example icon-button with a heart icon">navigate_next</mat-icon>
-    </button>
-
-    <button
-      mat-icon-button
-      matTooltip="Add a new item [Enter]"
-      aria-label="Shows a form to add new items"
-      (click)="editOrNew()"
-      class="faded"
-    >
-      <mat-icon aria-label="Add a new item to the Dayplan">add</mat-icon>
-    </button>
-
-    <button
-      mat-icon-button
-      matTooltip="Information about Dayplanner [?]"
-      aria-label="Shows information about Dayplanner"
-      (click)="openHelp()"
-    >
-      <mat-icon aria-label="Help">help_outline</mat-icon>
-    </button>
-
-  </mat-card-actions>
 </mat-card>
