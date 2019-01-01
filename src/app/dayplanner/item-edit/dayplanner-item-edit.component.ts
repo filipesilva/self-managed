@@ -62,15 +62,13 @@ export class DayplannerItemEditComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.item) {
-      this.itemFormControl.setValue(this.item.toString());
-    }
+    this.itemFormControl.setValue(this._getInitialValue());
   }
 
   @HostListener('document:keydown.enter', ['$event'])
   @Keybind({ preventInput: false })
   onSubmit() {
-    if (this.itemFormControl.value !== '') {
+    if (this.itemFormControl.value !== this._getInitialValue()) {
       const rawItem = DayplannerItem.parseItemString(this.itemFormControl.value, this.dayTimestamp);
       if (this.item) {
         this.item.update(rawItem);
@@ -94,5 +92,9 @@ export class DayplannerItemEditComponent implements OnInit {
     this.itemFormControl.reset(this.item ? this.item.toString() : '');
     this.exit.emit(submitted);
     setTimeout(() => this.itemInputField.nativeElement.blur(), 0);
+  }
+
+  private _getInitialValue() {
+    return this.item ? this.item.toString() : '';
   }
 }
