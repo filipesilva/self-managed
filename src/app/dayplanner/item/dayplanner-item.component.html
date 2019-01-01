@@ -15,6 +15,7 @@
       class="edit-container"
       [class.hidden]="!(editMode || forceEdit)"
       [item]="item"
+      [textStyle]="this.state | async"
       [collection]="collection"
       [dayTimestamp]="dayTimestamp"
       (exit)="closeEdit($event)"

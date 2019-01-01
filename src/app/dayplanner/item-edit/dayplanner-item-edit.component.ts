@@ -22,6 +22,7 @@ import { Keybind } from '../keybind.decorator';
       <mat-form-field
         class="full-width"
         [floatLabel]="'never'"
+        [ngClass]="this.textStyle"
       >
         <textarea
           cdkTextareaAutosize
@@ -47,6 +48,22 @@ import { Keybind } from '../keybind.decorator';
     .full-width {
       width: 100%;
     }
+
+    // NB: these are the same styles as in dayplanner-item.component.css and should be in sync.
+    // TODO: use scss and import them instead, or maybe roll this component into the other.
+    .unscheduled {
+      color: lightgray;
+    }
+
+    .past {
+      color: gray;
+    }
+
+    .current {
+      color: black;
+      font-size: 22px;
+      font-weight: bolder;
+    }
   `]
 })
 export class DayplannerItemEditComponent implements OnInit {
@@ -55,6 +72,7 @@ export class DayplannerItemEditComponent implements OnInit {
   @Input() item?: DayplannerItem;
   @Input() collection?: AngularFirestoreCollection<RawDayplannerItem> | null = null;
   @Input() dayTimestamp: number | null = null;
+  @Input() textStyle: string;
   @Output() exit: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('itemInput') itemInputField: ElementRef;
   itemFormControl = new FormControl('');
