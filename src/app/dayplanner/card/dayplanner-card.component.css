@@ -1,3 +1,7 @@
+:host {
+  margin: auto;
+}
+
 .dayplanner-list {
   box-shadow: inherit;
 }
@@ -7,13 +11,18 @@
 }
 
 @media (min-width:320px) {
-  /* mobile styles go here */
+  :host {
+    flex-grow: 1;
+  }
 }
 
-@media (min-width:1025px) {
+@media (min-width:850px) {
+  :host {
+    flex-grow: 0;
+  }
   .dayplanner-list {
     margin-top: 20px;
-    width: 400px;
+    width: 500px;
   }
   .dayplanner-list {
     border-left: 1px solid lightgray;
@@ -57,7 +66,6 @@
 
 
 /* TODO: use scss instead to group these with `mat-card-actions button` */
-
 /* They seem to need a different opacity though. */
 
 .actions mat-form-field {

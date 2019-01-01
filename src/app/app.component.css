@@ -1,7 +1,3 @@
 #main-container {
   display: flex;
 }
-
-#main-container div {
-  margin: auto;
-}
