@@ -43,6 +43,8 @@ import { Keybind } from '../keybind.decorator';
       min-width: 150px;
       max-width: 500px;
       width: 100%;
+      /* This margin offsets the form field padding to prevent text from going up when editing. */
+      margin-top: .4375em;
     }
 
     .full-width {
