@@ -20,7 +20,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DayplannerRoutingModule } from './dayplanner-routing.module';
 import { DayplannerCardComponent } from './card/dayplanner-card.component';
 import { DayplannerItemComponent } from './item/dayplanner-item.component';
-import { DayplannerItemEditComponent } from './item-edit/dayplanner-item-edit.component';
 import { DayplannerHelpComponent } from './help/dayplanner-help.component';
 
 
@@ -52,7 +51,6 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   declarations: [
     DayplannerCardComponent,
     DayplannerItemComponent,
-    DayplannerItemEditComponent,
     DayplannerHelpComponent,
   ],
   entryComponents: [

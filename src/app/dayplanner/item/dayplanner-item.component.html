@@ -7,20 +7,37 @@
     class="content"
     (tap)="(selected || !item) && showEditForm()"
   >
-    <div class="itemString" [class.hidden]="(editMode || forceEdit)">
+    <div
+      class="itemString"
+      [class.hidden]="(editMode || forceEdit)"
+    >
       {{item ? item.toString() : ''}}
     </div>
 
-    <sm-dayplanner-item-edit
+    <div
       class="edit-container"
       [class.hidden]="!(editMode || forceEdit)"
-      [item]="item"
-      [textStyle]="this.state | async"
-      [collection]="collection"
-      [dayTimestamp]="dayTimestamp"
-      (exit)="closeEdit($event)"
     >
-    </sm-dayplanner-item-edit>
+      <form class="item-form">
+        <mat-form-field
+          class="full-width"
+          [floatLabel]="'never'"
+          [ngClass]="this.textStyle"
+        >
+          <textarea
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+            #itemInput
+            matInput
+            [formControl]="itemFormControl"
+            placeholder="I intend to..."
+            (blur)="exitEdit()"
+          >
+        </textarea>
+          <mat-error>You must enter something</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
   </div>
 
   <div class="actions">

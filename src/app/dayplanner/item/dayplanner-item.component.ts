@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
+import { FormControl } from '@angular/forms';
 
 import { DayplannerItem, DayplannerItemComponentState, RawDayplannerItem } from '../dayplanner-item';
-import { DayplannerItemEditComponent } from '../item-edit/dayplanner-item-edit.component';
+import { Keybind } from '../keybind.decorator';
 
 
 @Component({
@@ -20,13 +21,15 @@ export class DayplannerItemComponent implements OnInit {
   @Input() forceEdit = false;
   @Input() dayTimestamp: number;
   @Input() collection?: AngularFirestoreCollection<RawDayplannerItem>;
-  @ViewChild(DayplannerItemEditComponent) editItem: DayplannerItemEditComponent;
+  @ViewChild('itemInput') itemInputField: ElementRef;
   state: Observable<DayplannerItemComponentState> = of(DayplannerItemComponentState.Upcoming);
+  itemFormControl = new FormControl('');
   editMode = false;
 
   constructor(public element: ElementRef) { }
 
   ngOnInit() {
+    this.itemFormControl.setValue(this._getInitialValue());
     if (this.ticker) {
       this.state = this.ticker.pipe(map(time => this.getStateForTimestamp(time)));
     }
@@ -46,7 +49,31 @@ export class DayplannerItemComponent implements OnInit {
 
   showEditForm() {
     this.editMode = true;
-    this.editItem.focus();
+    // setTimeout is needed because the edit form starts with `display:none`,
+    // we can't focus an element that isn't displayed. So we do it async.
+    // TODO: find a better way to do this.
+    setTimeout(() => this.itemInputField.nativeElement.focus(), 0);
+  }
+
+  exitEdit() {
+    this.editMode = false;
+    this.itemFormControl.reset(this.item ? this.item.toString() : '');
+    setTimeout(() => this.itemInputField.nativeElement.blur(), 0);
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  @Keybind({ preventInput: false })
+  onSubmit() {
+    if (this.itemFormControl.value !== this._getInitialValue()) {
+      const rawItem = DayplannerItem.parseItemString(this.itemFormControl.value, this.dayTimestamp);
+      if (this.item) {
+        this.item.update(rawItem);
+      } else if (this.collection) {
+        this.collection.add(rawItem);
+      } else {
+        // TODO: emit error?
+      }
+    }
   }
 
   private getStateForTimestamp(timestamp: number): DayplannerItemComponentState {
@@ -82,5 +109,9 @@ export class DayplannerItemComponent implements OnInit {
 
     // Otherwise, the item is in the past.
     return DayplannerItemComponentState.Past;
+  }
+
+  private _getInitialValue() {
+    return this.item ? this.item.toString() : '';
   }
 }
