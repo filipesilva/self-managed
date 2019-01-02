@@ -12,7 +12,7 @@
   height: 40px;
 }
 
-.itemString {
+.item-string {
   display: flex;
   align-items: center;
   min-height: 40px;
@@ -42,13 +42,16 @@
   opacity: 0;
   transition: all 0.1s ease-in-out;
   pointer-events: none;
+  /* Width of two buttons. */
+  width: 80px;
 }
 
-.selected .actions {
+.selected .actions, .editing .actions {
   opacity: 1;
   animation: enable-pointer-events 0.2s steps(1) forwards;
 }
 
+/* TODO: use this as a mixing on the '.editing' selector.  */
 .hidden {
   display: none;
 }

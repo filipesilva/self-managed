@@ -1,6 +1,7 @@
 <div
   class="item-container"
   [class.selected]="selected"
+  [class.editing]="(editMode || forceEdit)"
   [ngClass]="this.state | async"
 >
   <div
@@ -8,7 +9,7 @@
     (tap)="(selected || !item) && showEditForm()"
   >
     <div
-      class="itemString"
+      class="item-string"
       [class.hidden]="(editMode || forceEdit)"
     >
       {{item ? item.toString() : ''}}
@@ -31,7 +32,6 @@
             matInput
             [formControl]="itemFormControl"
             placeholder="I intend to..."
-            (blur)="exitEdit()"
           >
         </textarea>
           <mat-error>You must enter something</mat-error>
@@ -41,20 +41,47 @@
   </div>
 
   <div class="actions">
-    <button
-      mat-icon-button
-      matTooltip="Reschedule this item"
-      aria-label="Reschedule this item"
+    <div
+      class="display-actions"
+      [class.hidden]="(editMode || forceEdit) || !selected"
     >
-      <mat-icon aria-label="Reschedule">query_builder</mat-icon>
-    </button>
-    <button
-      mat-icon-button
-      matTooltip="Delete this item [delete]"
-      aria-label="Delete this item"
-      (click)="delete()"
+      <button
+        mat-icon-button
+        matTooltip="Reschedule this item"
+        aria-label="Reschedule this item"
+      >
+        <mat-icon aria-label="Reschedule">query_builder</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matTooltip="Delete this item [delete]"
+        aria-label="Delete this item"
+        (click)="delete()"
+      >
+        <mat-icon aria-label="Delete">delete</mat-icon>
+      </button>
+    </div>
+
+    <div
+      class="edit-actions"
+      [class.hidden]="!(editMode || forceEdit)"
     >
-      <mat-icon aria-label="Delete">delete</mat-icon>
-    </button>
+      <button
+        mat-icon-button
+        matTooltip="Submit input [enter]"
+        aria-label="Submit input"
+        (click)="submit()"
+      >
+        <mat-icon aria-label="Submit">done</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matTooltip="Cancel input [escape]"
+        aria-label="Cancel input"
+        (click)="reset()"
+      >
+        <mat-icon aria-label="Cancel">clear</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

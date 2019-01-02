@@ -29,7 +29,7 @@ export class DayplannerItemComponent implements OnInit {
   constructor(public element: ElementRef) { }
 
   ngOnInit() {
-    this.itemFormControl.setValue(this._getInitialValue());
+    this.reset();
     if (this.ticker) {
       this.state = this.ticker.pipe(map(time => this.getStateForTimestamp(time)));
     }
@@ -51,19 +51,19 @@ export class DayplannerItemComponent implements OnInit {
     this.editMode = true;
     // setTimeout is needed because the edit form starts with `display:none`,
     // we can't focus an element that isn't displayed. So we do it async.
-    // TODO: find a better way to do this.
+    // TODO: find a better way to do this. Maybe `ngZone.onStable`?
     setTimeout(() => this.itemInputField.nativeElement.focus(), 0);
   }
 
   exitEdit() {
     this.editMode = false;
-    this.itemFormControl.reset(this.item ? this.item.toString() : '');
+    // Same as above.
     setTimeout(() => this.itemInputField.nativeElement.blur(), 0);
   }
 
   @HostListener('document:keydown.enter', ['$event'])
   @Keybind({ preventInput: false })
-  onSubmit() {
+  submit() {
     if (this.itemFormControl.value !== this._getInitialValue()) {
       const rawItem = DayplannerItem.parseItemString(this.itemFormControl.value, this.dayTimestamp);
       if (this.item) {
@@ -73,7 +73,16 @@ export class DayplannerItemComponent implements OnInit {
       } else {
         // TODO: emit error?
       }
+      this.exitEdit();
     }
+  }
+
+  // Don't stop propagation to allow other escape handler to do their thing.
+  @HostListener('document:keydown.escape', ['$event'])
+  @Keybind({ preventInput: false })
+  reset() {
+    this.itemFormControl.reset(this._getInitialValue());
+    this.exitEdit();
   }
 
   private getStateForTimestamp(timestamp: number): DayplannerItemComponentState {
