@@ -73,7 +73,7 @@ export class DayplannerItemComponent implements OnInit {
       } else {
         // TODO: emit error?
       }
-      this.exitEdit();
+      this.reset();
     }
   }
 
