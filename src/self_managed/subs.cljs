@@ -66,7 +66,7 @@
   ;; being the two values supplied in the originating `(subscribe X Y)`.
   ;; X will be the query vector and Y is an advanced feature and out of scope
   ;; for this explanation.
- (fn [query-v _]
+ (fn [_query-v _]
    (subscribe [:sorted-todos]))    ;; returns a single input signal
 
   ;; This 2nd fn does the computation. Data values in, derived data out.
@@ -79,7 +79,7 @@
   ;;  - the input signals (a single item, a vector or a map)
   ;;  - the query vector supplied to query-v  (the query vector argument
   ;; to the "subscribe") and the 3rd one is for advanced cases, out of scope for this discussion.
- (fn [sorted-todos query-v _]
+ (fn [sorted-todos _query-v _]
    (vals sorted-todos)))
 
 ;; So here we define the handler for another intermediate node.
@@ -93,7 +93,7 @@
   ;; Signal Function
   ;; Tells us what inputs flow into this node.
   ;; Returns a vector of two input signals (in this case)
- (fn [query-v _]
+ (fn [_query-v _]
    [(subscribe [:todos])
     (subscribe [:showing])])
 

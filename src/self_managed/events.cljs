@@ -115,7 +115,7 @@
   check-spec-interceptor]          ;; after event handler runs, check app-db for correctness. Does it still match Spec?
 
   ;; the event handler (function) being registered
- (fn [{:keys [db local-store-todos]} _]                  ;; take 2 values from coeffects. Ignore event vector itself.
+ (fn [{:keys [_db local-store-todos]} _]                  ;; take 2 values from coeffects. Ignore event vector itself.
    {:db (assoc default-db :todos local-store-todos)}))   ;; all hail the new state to be put in app-db
 
 
