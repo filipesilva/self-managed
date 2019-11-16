@@ -1,4 +1,4 @@
-(ns app.components.bmi-calculator
+(ns self-managed.components.bmi-calculator
   (:require
    [reagent.core :as r]
    [devcards.core :as dc :include-macros true :refer [defcard deftest]]
