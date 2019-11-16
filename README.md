@@ -1,27 +1,52 @@
-# SelfManaged
+This project was bootstrapped with [Create CLJS App](https://github.com/filipesilva/create-cljs-app).
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.1.
+## Available Scripts
 
-## Development server
+In the project directory, you can run:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### `yarn start`
 
-## Code scaffolding
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The page will reload if you make edits.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The app uses [Reagent](https://reagent-project.github.io), a minimalistic interface between ClojureScript and React.<br>
+You can use existing npm React components directly via a [interop call](http://reagent-project.github.io/docs/master/InteropWithReact.html#creating-reagent-components-from-react-components).
 
-## Build
+Builds use [Shadow CLJS](https://github.com/thheller/shadow-cljs) for maximum compatibility with NPM libraries. You'll need a [Java SDK](https://adoptopenjdk.net/) (Version 8+, Hotspot) to use it. <br>
+You can [import npm libraries](https://shadow-cljs.github.io/docs/UsersGuide.html#js-deps) using Shadow CLJS. See the [user manual](https://shadow-cljs.github.io/docs/UsersGuide.html) for more information.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### `yarn test` and `yarn e2e`
 
-## Running unit tests
+`yarn test` launches the test runner in the interactive watch mode.<br>
+You can use `yarn test:once` to run the tests a single time, and `yarn e2e` to run end-to-end tests.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+See the ClojureScript [testing page](https://clojurescript.org/tools/testing) for more information. E2E tests use [Taiko](https://github.com/getgauge/taiko) to interact with a headless browser.
 
-## Running end-to-end tests
+### `yarn lint` and `yarn format`
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+`yarn lint` checks the code for known bad code patterns using [clj-kondo](https://github.com/borkdude/clj-kondo).
 
-## Further help
+`yarn format` will format your code in a consistent manner using [zprint-clj](https://github.com/clj-commons/zprint-clj).
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### `yarn build`
+
+Builds the app for production to the `public` folder.<br>
+It correctly bundles all code and optimizes the build for the best performance.
+
+Your app is ready to be deployed!
+
+## Useful resources
+
+Clojurians Slack http://clojurians.net/.
+
+CLJS FAQ (for JavaScript developers) https://clojurescript.org/guides/faq-js.
+
+Official CLJS API https://cljs.github.io/api/.
+
+Quick reference https://cljs.info/cheatsheet/.
+
+Offline searchable docs https://devdocs.io/.
+
+VSCode plugin https://github.com/BetterThanTomorrow/calva.
+
