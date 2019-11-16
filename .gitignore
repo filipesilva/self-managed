@@ -3,4 +3,4 @@ public/js
 out
 .shadow-cljs
 .nrepl-port
-.clj-kondo
+.clj-kondo/.cache
