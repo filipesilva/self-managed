@@ -55,13 +55,13 @@
 ;; But the challenge stipulates to NOT load the setting for the "showing"
 ;; filter. Just the todos.
 ;;
-
+(def persist-data (atom true))
 (def ls-key "todos-reframe")                         ;; localstore key
 
 (defn todos->local-store
   "Puts todos into localStorage"
   [todos]
-  (.setItem js/localStorage ls-key (str todos)))     ;; sorted-map written as an EDN map
+  (when @persist-data (.setItem js/localStorage ls-key (str todos))))     ;; sorted-map written as an EDN map
 
 
 ;; -- cofx Registrations  -----------------------------------------------------
@@ -79,9 +79,9 @@
  :local-store-todos
  (fn [cofx _]
       ;; put the localstore todos into the coeffect under :local-store-todos
-   (assoc cofx :local-store-todos
-             ;; read in todos from localstore, and process into a sorted map
-          (into (sorted-map)
-                (some->> (.getItem js/localStorage ls-key)
-                         (cljs.reader/read-string)    ;; EDN map -> map
-                         )))))
+     (assoc cofx :local-store-todos
+            ;; read in todos from localstore, and process into a sorted map
+            (into (sorted-map)
+                  (when @persist-data (some->> (.getItem js/localStorage ls-key)
+                                               (cljs.reader/read-string)    ;; EDN map -> map
+                                               ))))))

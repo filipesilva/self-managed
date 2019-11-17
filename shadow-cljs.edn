@@ -10,7 +10,10 @@
           :modules {:main {:init-fn self-managed.cards/main}}
           :compiler-options {:devcards true}
           :output-dir "public/js"
-          :target :browser}
+          :target :browser
+          :dev {:closure-defines {"re_frame.trace.trace_enabled_QMARK_" true}}
+          :devtools {:preloads [devtools.preload
+                                day8.re-frame-10x.preload]}}
   :test {:ns-regexp "self-managed.cards"
          :output-to "out/test.js"
          :target :node-test}
