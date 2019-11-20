@@ -10,18 +10,17 @@
             [self-managed.views.todo-app-states.empty]
             [self-managed.views.todo-app-states.some]))
 
-; Add a special class to the body to signal we're in devcards mode.
-; We want to mostly use the same styles as the app, but need to make some exceptions.
-(js/document.body.classList.add "using-devcards")
-
-; Disable data persistance on the db layer.
-(reset! persist-data false)
-
-; Initialize db.
-(rf/dispatch-sync [:initialise-db])
-
 ; Devcards works without an after-load, but shadow-cljs keeps asking for it.
 (defn ^:dev/after-load nothing [])
 
-; Start the devcards UI.
-(defn ^:export main [] (dc/start-devcard-ui!))
+(defn ^:export main
+  []
+  ; Add a special class to the body to signal we're in devcards mode.
+  ; We want to mostly use the same styles as the app, but need to make some exceptions.
+  (js/document.body.classList.add "using-devcards")
+  ; Disable data persistance on the db layer.
+  (reset! persist-data false)
+  ; Initialize db.
+  (rf/dispatch-sync [:initialise-db])
+  ; Start the devcards UI.
+  (dc/start-devcard-ui!))

@@ -20,7 +20,7 @@
 
 (deftest empty-state-tests
   (let [tr (render (r/as-element [todo-app]) #js {:container testing-container})]
-    (set-app-db! {})
+    (set-app-db! state-db)
     (is (and (.queryByText tr "first")
              (.queryByText tr "second")
              (.queryByText tr "third and done"))
