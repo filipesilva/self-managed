@@ -15,7 +15,7 @@
       [:input (merge (dissoc props :on-save :on-stop :title)
                      {:type        "text"
                       :value       @val
-                      :auto-focus  true
+                      ; :auto-focus  true ; auto-focus makes devcard tests jump around, disabled for now
                       :on-blur     save
                       :on-change   #(reset! val (-> % .-target .-value))
                       :on-key-down #(case (.-which %)
@@ -89,7 +89,7 @@
 (defn task-entry
   []
   [:header#header
-   [:h1 "todos"]
+   [:h1 ""] ; This should say Todos but it looks broken on devcards.
    [todo-input
     {:id "new-todo"
      :placeholder "What needs to be done?"
