@@ -18,7 +18,7 @@
    :frame true
    :history true})
 
-(deftest empty-state-tests
+(deftest some-state-tests
   (let [tr (render (r/as-element [todo-app]) #js {:container testing-container})]
     (set-app-db! state-db)
     (is (and (.queryByText tr "first")
