@@ -1,9 +1,9 @@
 (ns self-managed.views.todo-app-states.empty
   (:require [reagent.core :as r]
-            [devcards.core :as dc :include-macros true :refer [defcard deftest]]
+            [devcards.core :as dc :refer [defcard deftest]]
             [cljs.test :include-macros true :refer [is]]
             ["@testing-library/react" :refer [render cleanup]]
-            [self-managed.cards-helpers :refer [set-app-db!]]
+            [self-managed.cards-helpers :refer [set-app-db! testing-container]]
             [self-managed.views.todo-app :refer [todo-app]]))
 
 (defcard empty-state
@@ -15,9 +15,8 @@
    :history true})
 
 (deftest empty-state-tests
-  (set-app-db! {})
-  (let [el (aget (js/document.querySelectorAll "#app") 0)
-        tr (render (r/as-element [todo-app]) #js {:container el})]
+  (let [tr (render (r/as-element [todo-app]) #js {:container testing-container})]
+    (set-app-db! {})
     (is (.queryAllByText tr #"items left") "Should list items left")
     (is (.queryByText tr "All") "Should show 'All' filter")
     (is (.queryByText tr "Active") "Should show 'Active' filter")

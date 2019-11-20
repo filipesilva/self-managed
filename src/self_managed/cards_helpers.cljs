@@ -16,3 +16,8 @@
   [new-db]
   (dispatch [:set-db new-db])
   app-db)
+
+(def testing-container
+  "The container that should be used to render testing-library react components.
+  We reuse the #app div since the application isn't bootstrapped there anymore."
+  (js/document.querySelector "#app"))
