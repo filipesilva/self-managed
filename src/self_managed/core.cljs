@@ -40,7 +40,7 @@
   ;; Render the UI into the HTML's <div id="app" /> element
   ;; The view function `self-managed.views/todo-app` is the
   ;; root view for the entire UI.
-  (reagent/render [self-managed.views/todo-app]
+  (reagent/render [self-managed.views.todo-app/todo-app]
                   (.getElementById js/document "app")))
 
 (defn ^:dev/after-load clear-cache-and-render!

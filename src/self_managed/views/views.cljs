@@ -1,4 +1,4 @@
-(ns self-managed.views
+(ns self-managed.views.views
   (:require [reagent.core  :as reagent]
             [re-frame.core :refer [subscribe dispatch]]
             [clojure.string :as str]))
@@ -95,15 +95,3 @@
      :placeholder "What needs to be done?"
      :on-save #(when (seq %)
                  (dispatch [:add-todo %]))}]])
-
-
-(defn todo-app
-  []
-  [:div
-   [:section#todoapp
-    [task-entry]
-    (when (seq @(subscribe [:todos]))
-      [task-list])
-    [footer-controls]]
-   [:footer#info
-    [:p "Double-click to edit a todo"]]])

@@ -1,10 +1,10 @@
-(ns self-managed.states.some
+(ns self-managed.views.todo-app-states.some
   (:require [reagent.core :as r]
             [devcards.core :as dc :include-macros true :refer [defcard deftest]]
             [cljs.test :include-macros true :refer [is]]
             ["@testing-library/react" :refer [render cleanup]]
-            [self-managed.states.helpers :refer [set-app-db!]]
-            [self-managed.views :refer [todo-app]]))
+            [self-managed.cards-helpers :refer [set-app-db!]]
+            [self-managed.views.todo-app :refer [todo-app]]))
 
 (def state-db {:todos {1 {:id 1 :title "first" :done false}
                        2 {:id 2 :title "second" :done false}

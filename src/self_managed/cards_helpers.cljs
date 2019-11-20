@@ -1,4 +1,4 @@
-(ns self-managed.states.helpers
+(ns self-managed.cards-helpers
   (:require [re-frame.core :refer [reg-event-db dispatch]]
             [re-frame.db :refer [app-db]]
             [self-managed.db :refer [default-db]]

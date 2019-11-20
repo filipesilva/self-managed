@@ -1,10 +1,10 @@
-(ns self-managed.states.empty
+(ns self-managed.views.todo-app-states.empty
   (:require [reagent.core :as r]
             [devcards.core :as dc :include-macros true :refer [defcard deftest]]
             [cljs.test :include-macros true :refer [is]]
             ["@testing-library/react" :refer [render cleanup]]
-            [self-managed.states.helpers :refer [set-app-db!]]
-            [self-managed.views :refer [todo-app]]))
+            [self-managed.cards-helpers :refer [set-app-db!]]
+            [self-managed.views.todo-app :refer [todo-app]]))
 
 (defcard empty-state
   "*This is how Dayplanner looks when there are no items.*"

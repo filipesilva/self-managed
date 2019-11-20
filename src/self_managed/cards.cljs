@@ -6,9 +6,9 @@
             [self-managed.events] ; Also load the events and subs for state cards to work.
             [self-managed.subs] 
             [devcards.core :as dc :include-macros true]
-            [self-managed.states.helpers]
-            [self-managed.states.empty]
-            [self-managed.states.some]))
+            [self-managed.cards-helpers]
+            [self-managed.views.todo-app-states.empty]
+            [self-managed.views.todo-app-states.some]))
 
 ; Add a special class to the body to signal we're in devcards mode.
 ; We want to mostly use the same styles as the app, but need to make some exceptions.
