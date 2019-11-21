@@ -17,7 +17,10 @@
   (dispatch [:set-db new-db])
   app-db)
 
-(def testing-container
+(defn testing-container
   "The container that should be used to render testing-library react components.
-  We reuse the #app div since the application isn't bootstrapped there anymore."
-  (js/document.querySelector "#app"))
+  We want to provide our own container so that the devcard render isn't used."
+  []
+  (let [app-div (js/document.createElement "div")]
+    (.setAttribute app-div "id" "testing-lib")
+    (js/document.body.appendChild app-div)))

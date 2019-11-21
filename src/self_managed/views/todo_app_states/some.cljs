@@ -1,5 +1,6 @@
 (ns self-managed.views.todo-app-states.some
   (:require [reagent.core :as r]
+            [day8.re-frame.test :refer [run-test-sync]]
             [devcards.core :as dc :refer [defcard deftest]]
             [cljs.test :include-macros true :refer [is]]
             ["@testing-library/react" :refer [render cleanup]]
@@ -19,12 +20,13 @@
    :history true})
 
 (deftest some-state-tests
-  (let [tr (render (r/as-element [todo-app]) #js {:container testing-container})]
-    (set-app-db! state-db)
-    (is (and (.queryByText tr "first")
-             (.queryByText tr "second")
-             (.queryByText tr "third and done"))
-        "Should show all three elements")
-    (is (.queryByLabelText tr "Mark all as complete") "Should show 'Mark all as complete' input")
-    (is (.queryByText tr "Clear completed") "Should show 'Clear completed' button")
-    (cleanup)))
+  (run-test-sync
+   (set-app-db! state-db)
+   (let [tr (render (r/as-element [todo-app]) #js {:container (testing-container)})]
+     (is (and (.queryByText tr "first")
+              (.queryByText tr "second")
+              (.queryByText tr "third and done"))
+         "Should show all three elements")
+     (is (.queryByLabelText tr "Mark all as complete") "Should show 'Mark all as complete' input")
+     (is (.queryByText tr "Clear completed") "Should show 'Clear completed' button")
+     (cleanup))))
