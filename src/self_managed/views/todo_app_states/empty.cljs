@@ -19,7 +19,7 @@
   (run-test-sync
    (set-app-db! {})
    (let [tr (render (r/as-element [todo-app]) #js {:container (testing-container)})]
-     (is (.queryAllByText tr #"items left") "Should list items left")
+     (is (.queryByText tr #"items left") "Should list items left")
      (is (.queryByText tr "All") "Should show 'All' filter")
      (is (.queryByText tr "Active") "Should show 'Active' filter")
      (is (.queryByText tr "Completed") "Should show 'Completed' filter")
