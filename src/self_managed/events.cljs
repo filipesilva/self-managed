@@ -122,7 +122,7 @@
 ;; usage:  (dispatch [:set-showing  :active])
 ;; This event is dispatched when the user clicks on one of the 3
 ;; filter buttons at the bottom of the display.
-(reg-event-db      ;; part of the re-frame API
+#_(reg-event-db      ;; part of the re-frame API
  :set-showing     ;; event-id
 
   ;; only one interceptor
@@ -146,7 +146,7 @@
 ;;
 ;; So, `path` operates a little like `update-in`
 ;;
-#_(reg-event-db
+(reg-event-db
    :set-showing
 
   ;; this now a chain of 2 interceptors. Note use of `path`

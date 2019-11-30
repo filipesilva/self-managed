@@ -87,7 +87,7 @@
 ;; As a result note:
 ;;   - the first function (which returns the signals) returns a 2-vector
 ;;   - the second function (which is the computation) destructures this 2-vector as its first parameter
-(reg-sub
+#_(reg-sub
  :visible-todos
 
   ;; Signal Function
@@ -132,7 +132,7 @@
 ;; reg-sub provides some macro sugar so you can nominate a very minimal
 ;; vector of input signals. The 1st function is not needed.
 ;; Here is the example above rewritten using the sugar.
-#_(reg-sub
+(reg-sub
    :visible-todos
    :<- [:todos]
    :<- [:showing]
