@@ -1,6 +1,6 @@
-(ns self-managed.views.todo-app-states.empty
+(ns self-managed.views.todo-app-cards.empty
   (:require [devcards.core :as dc :refer [defcard]]
-            [self-managed.cards-helpers :refer [set-app-db!]]
+            [self-managed.cards.helpers :refer [set-app-db!]]
             [self-managed.views.todo-app :refer [todo-app]]))
 
 (defcard explore-state

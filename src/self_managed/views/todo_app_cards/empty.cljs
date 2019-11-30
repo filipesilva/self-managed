@@ -1,10 +1,10 @@
-(ns self-managed.views.todo-app-states.empty
+(ns self-managed.views.todo-app-cards.empty
   (:require [reagent.core :as r]
             [day8.re-frame.test :refer [run-test-sync]]
             [devcards.core :as dc :refer [defcard deftest]]
             [cljs.test :include-macros true :refer [is]]
             ["@testing-library/react" :refer [render cleanup]]
-            [self-managed.cards-helpers :refer [set-app-db! testing-container]]
+            [self-managed.cards.helpers :refer [set-app-db! testing-container]]
             [self-managed.views.todo-app :refer [todo-app]]))
 
 (defcard empty-state

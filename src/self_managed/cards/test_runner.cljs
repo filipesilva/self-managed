@@ -1,11 +1,11 @@
-(ns self-managed.cards-test-runner
+(ns self-managed.cards.test-runner
   {:dev/always true}
   (:require [shadow.test.env :as env]
             [cljs.test :as ct]
             [shadow.test :as st]
             ["jsdom-global" :as jsdom-global]
-            ; Import the cards ns to get all the tests.
-            [self-managed.cards :refer [setup-db]]))
+            [self-managed.cards.helpers :refer [setup-db]]
+            [self-managed.cards.all-cards]))
 
 ; ct/report and run-tests copied from shadow.node.test
 ; Just importing them doesn't work.

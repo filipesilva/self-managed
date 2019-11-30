@@ -1,8 +1,14 @@
-(ns self-managed.cards-helpers
-  (:require [re-frame.core :refer [reg-event-db dispatch]]
+(ns self-managed.cards.helpers
+  (:require [re-frame.core :refer [reg-event-db dispatch dispatch-sync]]
             [re-frame.db :refer [app-db]]
-            [self-managed.db :refer [default-db]]
+            [self-managed.db :refer [default-db persist-data]]
             [self-managed.events :refer [check-spec-interceptor]]))
+
+(defn setup-db []
+  ; Disable data persistance on the db layer.
+  (reset! persist-data false)
+  ; Initialize db.
+  (dispatch-sync [:initialise-db]))
 
 ; Add an event to set the db to a predefined state.
 (reg-event-db
