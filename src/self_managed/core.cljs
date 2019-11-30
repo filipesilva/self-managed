@@ -6,7 +6,7 @@
             [secretary.core :as secretary]
             [self-managed.events] ;; These two are only required to make the compiler
             [self-managed.subs]   ;; load them (see docs/App-Structure.md)
-            [self-managed.views])
+            [self-managed.views.todo-app :refer [todo-app]])
   (:import [goog History]
            [goog.history EventType]))
 
@@ -40,7 +40,7 @@
   ;; Render the UI into the HTML's <div id="app" /> element
   ;; The view function `self-managed.views/todo-app` is the
   ;; root view for the entire UI.
-  (reagent/render [self-managed.views.todo-app/todo-app]
+  (reagent/render [todo-app]
                   (.getElementById js/document "app")))
 
 (defn ^:dev/after-load clear-cache-and-render!
