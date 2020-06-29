@@ -1,6 +1,7 @@
 (ns self-managed.events
   (:require
-   [self-managed.db    :refer [default-db todos->local-store]]
+   [re-posh.core :refer [reg-event-ds]]
+   [self-managed.db :refer [default-db todos->local-store ds-default-db]]
    [re-frame.core :refer [reg-event-db reg-event-fx inject-cofx path after]]
    [cljs.spec.alpha :as s]))
 
@@ -221,3 +222,8 @@
      (reduce #(assoc-in %1 [%2 :done] new-done)
              todos
              (keys todos)))))
+
+(reg-event-ds
+ ::ds-initialize-db
+ (fn [_ _]
+   ds-default-db))

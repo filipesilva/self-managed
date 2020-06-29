@@ -1,7 +1,9 @@
 (ns self-managed.db
   (:require [cljs.reader]
             [cljs.spec.alpha :as s]
-            [re-frame.core :as re-frame]))
+            [re-frame.core :as re-frame]
+            [datascript.core :refer [create-conn]]
+            [re-posh.core :refer [connect!]]))
 
 
 ;; -- Spec --------------------------------------------------------------------
@@ -78,9 +80,26 @@
  :local-store-todos
  (fn [cofx _]
       ;; put the localstore todos into the coeffect under :local-store-todos
-     (assoc cofx :local-store-todos
+   (assoc cofx :local-store-todos
             ;; read in todos from localstore, and process into a sorted map
-            (into (sorted-map)
-                  (when @persist-data (some->> (.getItem js/localStorage ls-key)
-                                               (cljs.reader/read-string)    ;; EDN map -> map
-                                               ))))))
+          (into (sorted-map)
+                (when @persist-data (some->> (.getItem js/localStorage ls-key)
+                                             (cljs.reader/read-string)    ;; EDN map -> map
+                                             ))))))
+
+(def conn (create-conn))
+(defn connect-db []
+  (connect! conn))
+
+(def ds-default-db
+  [{:type :todo
+    :title "first"
+    :done? false}
+   {:type :todo
+    :title "second"
+    :done? false}
+   {:type :todo
+    :title "third and done"
+    :done? true}
+   {:type :filters
+    :showing :all}])

@@ -4,6 +4,7 @@
             [reagent.core :as reagent]
             [re-frame.core :as rf :refer [dispatch dispatch-sync]]
             [secretary.core :as secretary]
+            [self-managed.db :refer [connect-db]]
             [self-managed.events] ;; These two are only required to make the compiler
             [self-managed.subs]   ;; load them (see docs/App-Structure.md)
             [self-managed.views.todo-app :refer [todo-app]])
@@ -52,4 +53,8 @@
   ;; Using the sync version of dispatch means that value is in
   ;; place before we go onto the next step.
   (dispatch-sync [:initialise-db])
+  
+  (connect-db)
+  (dispatch-sync [:self-managed.events/ds-initialize-db])
+  
   (render))

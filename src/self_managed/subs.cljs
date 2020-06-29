@@ -1,5 +1,6 @@
 (ns self-managed.subs
-  (:require [re-frame.core :refer [reg-sub subscribe]]))
+  (:require [re-frame.core :refer [reg-sub subscribe]]
+            [re-posh.core :as rp :refer [reg-query-sub reg-pull-sub reg-pull-many-sub]]))
 
 ;; -------------------------------------------------------------------------------------
 ;; Layer 2
@@ -17,6 +18,11 @@
  (fn [db _]        ;; db is the (map) value stored in the app-db atom
    (:showing db))) ;; extract a value from the application state
 
+(reg-query-sub
+ ::ds-showing
+ '[:find ?s .
+   :where [?e :type :filters]
+          [?e :showing ?s]])
 
 ;; Next, the registration of a similar handler is done in two steps.
 ;; First, we `defn` a pure handler function.  Then, we use `reg-sub` to register it.
@@ -26,6 +32,11 @@
   [db _]
   (:todos db))
 (reg-sub :sorted-todos sorted-todos)    ;; usage: (subscribe [:sorted-todos])
+
+(reg-query-sub
+ ::ds-todo-ids
+ '[:find ?e
+   :where [?e :type :todo]])
 
 ;; -------------------------------------------------------------------------------------
 ;; Layer 3
@@ -81,6 +92,14 @@
   ;; to the "subscribe") and the 3rd one is for advanced cases, out of scope for this discussion.
  (fn [sorted-todos _query-v _]
    (vals sorted-todos)))
+
+(rp/reg-sub
+ ::ds-todos
+ :<- [::ds-todo-ids]
+ (fn [ids _]
+   {:type    :pull-many
+    :pattern '[*]
+    :ids     (reduce into [] ids)}))
 
 ;; So here we define the handler for another intermediate node.
 ;; This time the computation involves two input signals.
@@ -143,6 +162,16 @@
                        :all    identity)]
        (filter filter-fn todos))))
 
+(reg-sub
+ ::ds-visible-todos
+ :<- [::ds-todos]
+ :<- [::ds-showing]
+ (fn [[todos showing] _]
+     (let [filter-fn (case showing
+                       :active (complement :done?)
+                       :done   :done?
+                       :all    identity)]
+       (filter filter-fn todos))))
 
 (reg-sub
  :all-complete?
@@ -151,14 +180,33 @@
    (every? :done todos)))
 
 (reg-sub
+ ::ds-all-complete?
+ :<- [::ds-todos]
+ (fn [todos _]
+   (every? :done? todos)))
+
+(reg-sub
  :completed-count
  :<- [:todos]
  (fn [todos _]
    (count (filter :done todos))))
 
 (reg-sub
+ ::ds-completed-count
+ :<- [::ds-todos]
+ (fn [todos _]
+   (count (filter :done? todos))))
+
+(reg-sub
  :footer-counts
  :<- [:todos]
  :<- [:completed-count]
+ (fn [[todos completed] _]
+   [(- (count todos) completed) completed]))
+
+(reg-sub
+ ::ds-footer-counts
+ :<- [::ds-todos]
+ :<- [::ds-completed-count]
  (fn [[todos completed] _]
    [(- (count todos) completed) completed]))
